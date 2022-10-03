@@ -9,6 +9,10 @@
 
 O projeto tem sua descrição técnica no seguinte diretório:
 
+[Casos de uso](utils/Aula%202%20-%20Especificação%20Caso%20de%20Uso.docx%20(4).pdf)
+
+Nele poderá entender-se o resumo dos Casos de Uso do projeto.
+
 ## :open_file_folder: Estrutura de Arquivos
 
 - **MyProject/**
