@@ -26,8 +26,12 @@ Para instalar as dependências necessárias para rodar o projeto é necessário 
 
 1.  :snake: Instale Python 3.X no seu computador seguindo o seguinte [link](https://www.python.org/downloads/).
 2.  :cd: Clone o repositório onde preferir, como exemplo, na pasta webapp. Para tal, faça o seguinte comando:
-      ```bash
+      ```
     		$	git clone https://github.com/sergio-contente/PCS3643.git
+E vá para o diretório do projeto:
+
+			$ cd MyProj
+
 3.  :earth_americas: Crie um ambiente virtual utilizando o comando, onde __env__ pode ser qualquer nome de ambiente:
 
 		
