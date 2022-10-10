@@ -16,7 +16,7 @@ class Rota(models.Model):
 
 class Status(models.Model):
 	id_status = models.IntegerField(primary_key=True)
-	status = models.CharField(max_length=20, null=False)
+	status_voo = models.CharField(max_length=20, null=False)
 	class Meta:
   		db_table ='status'
 
