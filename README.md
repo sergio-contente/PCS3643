@@ -30,7 +30,7 @@ Para instalar as dependências necessárias para rodar o projeto é necessário 
     		$	git clone https://github.com/sergio-contente/PCS3643.git
 E vá para o diretório do projeto:
 
-			$ cd MyProj
+			$ cd PCS3643/MyProj
 
 3.  :earth_americas: Crie um ambiente virtual utilizando o comando, onde __env__ pode ser qualquer nome de ambiente:
 
