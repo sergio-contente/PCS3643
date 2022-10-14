@@ -55,7 +55,9 @@ Para conseguir executar o projeto de maneira satisfatória é necessário realiz
 
 Então, para averiguar que ocorreu conforme o esperado, o terminal irá informar: "Starting development server at http://127.0.0.1:8000/".Abra no navegador o  seguinte servidor: "http://127.0.0.1:8000/FIRST/".
    
-	 
+## Diagramas
+
+Os diagramas referentes a documentação do projeto encontra-se na pasta PCS3643/utils
 
 
 
