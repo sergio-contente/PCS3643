@@ -30,7 +30,7 @@ Para instalar as dependências necessárias para rodar o projeto é necessário 
     		$	git clone https://github.com/sergio-contente/PCS3643.git
 E vá para o diretório do projeto:
 
-			$ cd MyProj
+			$ cd PCS3643/MyProj
 
 3.  :earth_americas: Crie um ambiente virtual utilizando o comando, onde __env__ pode ser qualquer nome de ambiente:
 
@@ -55,7 +55,9 @@ Para conseguir executar o projeto de maneira satisfatória é necessário realiz
 
 Então, para averiguar que ocorreu conforme o esperado, o terminal irá informar: "Starting development server at http://127.0.0.1:8000/".Abra no navegador o  seguinte servidor: "http://127.0.0.1:8000/FIRST/".
    
-	 
+## Diagramas
+
+Os diagramas referentes a documentação do projeto encontra-se na pasta PCS3643/utils
 
 
 
