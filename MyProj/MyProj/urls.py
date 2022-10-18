@@ -20,6 +20,10 @@ from book import views_book
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('main_flight/', views.main_flight),
-    path('FIRST/', views_book.bookview)
+    path('ListaVoos/', views.ListaVoos),
+    path('CadastrarVoo/', views.CadastrarVoo),
+    path('AtualizarVoo/', views.AtualizarVoo),
+    path('GerarRelatorios/', views.GerarRelatorios),
+    path('MonitorarVoo/', views.MonitorarVoo),
+    path('', views.Login, name='Login')
 ]
