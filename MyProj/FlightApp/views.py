@@ -41,7 +41,7 @@ def Login(request):
                 return HttpResponseRedirect('/')
             # ...
             # redirect to a new URL:
-            return render(request, "ListaVoos.html")
+        return render(request, "ListaVoos.html")
 
     # if a GET (or any other method) we'll create a blank form
     else:
