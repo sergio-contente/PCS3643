@@ -1,4 +1,4 @@
-from http.client import HTTPResponse
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import render
 
 from FlightApp.forms import LoginForm
@@ -38,9 +38,10 @@ def Login(request):
             if form.cleaned_data == {'username': 'admin', 'password': 'admin'}:
                 return HttpResponseRedirect('/ListaVoos/')
             else:
-                return HttpResponseNotAllowed()
+                return HttpResponseRedirect('/')
             # ...
             # redirect to a new URL:
+            return render(request, "ListaVoos.html")
 
     # if a GET (or any other method) we'll create a blank form
     else:
