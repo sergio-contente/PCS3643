@@ -63,11 +63,28 @@ Então, para averiguar que ocorreu conforme o esperado, o terminal irá informar
 
 Os diagramas referentes a documentação do projeto encontra-se na pasta PCS3643/utils
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
+## Testando
 
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
+Para realizar testes, repita os seguintes passos:
 
-<!-- ALL-CONTRIBUTORS-LIST:END -->
+1. Na pasta "MyProj", faça:
+```
+python manage.py makemigrations
+```
+
+1. Crie então um banco de dados:
+```
+python menage.py migrate
+```
+
+1. Os testes estão definidos em `FlightApp\test.py`. Execute-os:
+```
+python manage.py test
+```
+## Login Teste
+
+Para realizar o login, utilize as seguintes credenciais:
+```
+Username: admin
+Password: admin
+```
