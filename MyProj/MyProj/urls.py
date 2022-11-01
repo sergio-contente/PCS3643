@@ -16,7 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from FlightApp import views
-from book import views_book
 
 urlpatterns = [
     path('admin/', admin.site.urls),
