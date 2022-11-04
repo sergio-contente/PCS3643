@@ -1,5 +1,6 @@
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import render
+import datetime
 
 from FlightApp.forms import LoginForm
 
@@ -27,6 +28,9 @@ def MonitorarVoo(request):
 
 
 def Login(request):
+    admin_cred = {'username': 'admin', 'password': 'admin'}
+    operador = {'username': 'operador', 'password': 'operador'}
+    funcionario = {'username': 'funcionario', 'password': 'funcionario'}
     print(">>")
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -35,7 +39,8 @@ def Login(request):
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
-            if form.cleaned_data == {'username': 'admin', 'password': 'admin'}:
+            credentials = form.cleaned_data
+            if credentials == admin_cred or credentials == operador or credentials == funcionario:
                 return HttpResponseRedirect('/ListaVoos/')
             else:
                 return HttpResponseRedirect('/')
