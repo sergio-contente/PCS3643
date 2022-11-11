@@ -1,9 +1,14 @@
 from django.db import models
+ESTADOS_VOO = [
+	"ESTACIONADO",
+	"ATERRISSANDO",
+]
+
 # Create your models here.
 class HorarioReal(models.Model):
 	id_real = models.IntegerField(primary_key=True)
-	partida_real = models.DateTimeField(null=False)
-	chegada_real = models.DateTimeField(null=False)
+	partida_real = models.DateTimeField(null=True)
+	chegada_real = models.DateTimeField(null=True)
 	class Meta:
 		db_table = 'horarios_reais'
 
