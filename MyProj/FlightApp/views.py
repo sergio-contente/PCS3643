@@ -1,12 +1,15 @@
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import render
+from FlightApp.forms import *
 import datetime
+from FlightApp.models import *
 from django.contrib import messages
 
 from FlightApp.forms import LoginForm
 
 # Create your views here.
-
+global tentativas
+tentativas = 0
 
 def ListaVoos(request):
     return render(request, "ListaVoos.html")
@@ -17,7 +20,21 @@ def GerarRelatorios(request):
 
 
 def CadastrarVoo(request):
-    return render(request, "CadastrarVoo.html")
+    if request.method == 'POST':
+        form = RegisterFlightForm(request.POST)
+        voo_base = {"flightCode": "", "state": "", "route": "", "departureTime": "", "arrivalTime": ""}
+        if form.is_valid():
+            credentials = form.cleaned_data
+            messages.success(request, "Voo cadastrado com sucesso!")
+            Voo.objects.create(codigo_voo = form.cleaned_data["flightCode"], 
+                companhia_aerea = form.cleaned_data["airline"], estado=form.cleaned_data["state"], 
+                rota=form.cleaned_data["route"], previsao=form.cleaned_data["departureTime"], real=form.cleaned_data["arrivalTime"])
+            return HttpResponseRedirect('/CadastrarVoo/')
+            #salvar no DB
+            #mostrar msg de sucesso
+    else:
+        form = RegisterFlightForm()
+        return render(request, "CadastrarVoo.html", {"form": form})
 
 
 def AtualizarVoo(request):
@@ -33,12 +50,11 @@ def Login(request):
     operador = {'username': 'operador', 'password': 'operador'}
     funcionario = {'username': 'funcionario', 'password': 'funcionario'}
     global tentativas
-    tentativas = 0
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = LoginForm(request.POST)
-        if (tentativas == 2):
+        if (tentativas == 3):
               messages.error(request, "Número de tentativas ultrapassado. Acesso bloqueado.")
               return HttpResponseRedirect('/')
             # check whether it's valid:
@@ -50,7 +66,7 @@ def Login(request):
                 return HttpResponseRedirect('/ListaVoos/')
             else:
                 tentativas = tentativas + 1
-                messages.warning(request, f"Login inválido. Número de tentativas restantes: {tentativas%3}")
+                messages.warning(request, f"Login inválido. Número de tentativas restantes: {3 - tentativas}")
                 return HttpResponseRedirect('/')
             # ...
             # redirect to a new URL:
