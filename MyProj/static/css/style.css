@@ -1,0 +1,26 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #000;
+    color: aliceblue;
+    font-family: Helvetica, sans-serif;
+}
+
+.mainWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.formWrapper {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-items: center; */
+    padding: 4.8em;
+    background-color: #1a0014;
+    border-radius: 2.4em;
+}
