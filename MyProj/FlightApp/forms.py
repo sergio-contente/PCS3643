@@ -1,11 +1,14 @@
 from django import forms
 
 airports = (
-    ("1", "RIO"),
+    ("1", "ATL"),
     ("2", "GRU"),
-    ("3", "AMAZONIA"),
-    ("4", "CHINA")
+    ("3", "DFW"),
+    ("4", "CAN"),
+    ("5", "MEX"),
+    ("6", "DEL")
 )
+
 
 class LoginForm(forms.Form):
     username = forms.CharField()
@@ -13,13 +16,16 @@ class LoginForm(forms.Form):
 
 
 class RegisterFlightForm(forms.Form):
-    flightCode = forms.CharField()
-    airline = forms.CharField()
-    state = "estacionado"
-    route = forms.ChoiceField(choices=airports)
-    departureTime = forms.DateTimeField()
-    arrivalTime = forms.DateTimeField()
+    flightCode = forms.CharField(label="Código de Voo")
+    airline = forms.CharField(label="Linha Aérea")
+    departureAirport = forms.ChoiceField(
+        choices=airports, label="Aeroporto de Saída")
+    destinationAirport = forms.ChoiceField(
+        choices=airports, label="Aeroporto de Partida")
+    departureTime = forms.DateTimeField(label="Partida Prevista")
+    arrivalTime = forms.DateTimeField(label="Chegada Prevista")
 
-    class Meta:
-        # model = User
-        fields = ('código', 'password', 'password', 'password', 'password', 'password')
+    # class Meta:
+    #     # model = User
+    #     fields = ('código', 'password', 'password',
+    #               'password', 'password', 'password')
