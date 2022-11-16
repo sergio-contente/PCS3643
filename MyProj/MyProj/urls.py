@@ -22,11 +22,11 @@ app_name = 'flightApp'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ListaVoos/', views.ListaVoos),
+    path('ListaVoos/delete/<str:codigo>',
+         views.deleteFlight, name='deleteFlight'),
     path('CadastrarVoo/', views.CadastrarVoo),
     path('AtualizarVoo/', views.AtualizarVoo),
     path('GerarRelatorios/', views.GerarRelatorios),
-    path('MonitorarVoo/', views.MonitorarVoo),
-    path('', views.Login, name='Login'),
-    path('ListaVoos/delete/<str:codigo>',
-         views.deleteFlight, name='deleteFlight')
+    path('MonitorarVoo/<str:code>', views.MonitorarVoo, name="manageFlight"),
+    path('', views.Login, name='Login')
 ]

@@ -14,13 +14,17 @@ tentativas = 0
 def ListaVoos(request):
     if request.method == "GET":
         flights = Voo.objects.all()
-        # provavelmente não optimo
         for flight in flights:
-            flight.rota.aeroporto_destino = airports[int(
-                flight.rota.aeroporto_destino) - 1][1]
-            flight.rota.aeroporto_saida = airports[int(
-                flight.rota.aeroporto_saida) - 1][1]
+            fixFlightAirportInfo(flight)
+
         return render(request, "ListaVoos.html", {'flights': flights, 'currFlight': ""})
+
+
+def fixFlightAirportInfo(flight: Voo):
+    flight.rota.aeroporto_destino = airports[int(
+        flight.rota.aeroporto_destino) - 1][1]
+    flight.rota.aeroporto_saida = airports[int(
+        flight.rota.aeroporto_saida) - 1][1]
 
 
 def deleteFlight(request, codigo):
@@ -38,7 +42,6 @@ def CadastrarVoo(request):
         form = RegisterFlightForm(request.POST)
         if form.is_valid():
             newFlightInfo = form.cleaned_data
-            print(newFlightInfo)
             Voo.objects.create(codigo_voo=newFlightInfo["flightCode"],
                                companhia_aerea=newFlightInfo["airline"],
                                estado=Status.objects.create(),
@@ -61,8 +64,10 @@ def AtualizarVoo(request):
     return render(request, "AtualizarVoo.html")
 
 
-def MonitorarVoo(request):
-    return render(request, "MonitorarVoo.html")
+def MonitorarVoo(request, code):
+    flight = Voo.objects.get(codigo_voo=code)
+    fixFlightAirportInfo(flight)
+    return render(request, "MonitorarVoo.html", {"flight": flight})
 
 
 def Login(request):
