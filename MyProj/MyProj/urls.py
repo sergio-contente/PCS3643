@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from FlightApp import views
 
+app_name = 'flightApp'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ListaVoos/', views.ListaVoos),
@@ -24,5 +26,7 @@ urlpatterns = [
     path('AtualizarVoo/', views.AtualizarVoo),
     path('GerarRelatorios/', views.GerarRelatorios),
     path('MonitorarVoo/', views.MonitorarVoo),
-    path('', views.Login, name='Login')
+    path('', views.Login, name='Login'),
+    path('ListaVoos/delete/<str:codigo>',
+         views.deleteFlight, name='deleteFlight')
 ]

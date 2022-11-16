@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bootstrap demo</title>
+    <title>Lista Voos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous" />
 </head>
 
@@ -30,13 +30,15 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
                             Fechar
                         </button>
-                    <button type="button" class="btn btn-primary">
-                            Deletar
-                        </button>
+                    <div class="btn btn-primary">
+                        <a>Deletar</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Modal -->
+
     <a href="/CadastrarVoo"><button type="button" class="btn btn-primary">
                 Cadastrar Voo
             </button>
@@ -68,6 +70,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
+    {% block content %} {% if flights|length > 0 %}
     <table class="table align-middle mb-0 bg-white">
         <thead class="bg-light">
             <tr>
@@ -80,22 +83,29 @@
             </tr>
         </thead>
         <tbody>
+            {% for flight in flights %}
             <tr>
                 <td>
                     <div class="d-flex align-items-center">
                         <!-- <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="" style="width: 45px; height: 45px" class="rounded-circle" /> -->
                         <div class="ms-3">
-                            <p class="fw-bold mb-1">GRU00001</p>
+                            <p class="fw-bold mb-1">
+                                {{ flight.codigo_voo}}
+                            </p>
                         </div>
                     </div>
                 </td>
                 <td>
-                    <p class="fw-normal mb-1">Aeroporto de Congonhas</p>
+                    <p class="fw-normal mb-1">
+                        {{flight.rota.aeroporto_saida}}
+                    </p>
                 </td>
                 <td>
-                    <p class="fw-normal mb-1">Aeroporto de Paris</p>
+                    <p class="fw-normal mb-1">
+                        {{flight.rota.aeroporto_destino}}
+                    </p>
                 </td>
-                <td>13:00</td>
+                <td>{{flight.previsao.partida_prevista}}</td>
                 <td>
                     <a href="/MonitorarVoo">
                         <button type="button" class="btn btn-link btn-sm btn-rounded">
@@ -105,7 +115,7 @@
                 </td>
                 <td>
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-flightCode="{{flight.codigo_voo}}">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -125,11 +135,25 @@
                         </button>
                 </td>
             </tr>
+            {% endfor %}
         </tbody>
     </table>
+    {% else %}
+    <span>No Data</span> {% endif %} {% endblock %}
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+        $("#exampleModal").on("show.bs.modal", function(event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var flightCode = button.attr("data-flightCode"); // Extract flight code
+            var modal = $(this);
+            modal
+                .find(".modal-footer a")
+                .attr("href", "delete/" + flightCode);
+            console.log(modal.find(".modal-footer a"));
+        });
+    </script>
 </body>
 
 </html>

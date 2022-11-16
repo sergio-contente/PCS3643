@@ -1,10 +1,9 @@
-from django.http import HttpResponseRedirect, HttpResponseNotAllowed
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.contrib import messages
 from FlightApp.forms import *
 from FlightApp.models import *
-from django.contrib import messages
-from django.views.generic import TemplateView
-
+from FlightApp.utils import airports
 from FlightApp.forms import LoginForm
 
 # Create your views here.
@@ -13,7 +12,21 @@ tentativas = 0
 
 
 def ListaVoos(request):
-    return render(request, "ListaVoos.html")
+    if request.method == "GET":
+        flights = Voo.objects.all()
+        # provavelmente não optimo
+        for flight in flights:
+            flight.rota.aeroporto_destino = airports[int(
+                flight.rota.aeroporto_destino) - 1][1]
+            flight.rota.aeroporto_saida = airports[int(
+                flight.rota.aeroporto_saida) - 1][1]
+        return render(request, "ListaVoos.html", {'flights': flights, 'currFlight': ""})
+
+
+def deleteFlight(request, codigo):
+    flight = Voo.objects.get(codigo_voo=codigo)
+    flight.delete()
+    return HttpResponseRedirect("/ListaVoos/")
 
 
 def GerarRelatorios(request):
