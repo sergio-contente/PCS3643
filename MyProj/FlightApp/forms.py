@@ -1,13 +1,5 @@
 from django import forms
-
-airports = (
-    ("1", "ATL"),
-    ("2", "GRU"),
-    ("3", "DFW"),
-    ("4", "CAN"),
-    ("5", "MEX"),
-    ("6", "DEL")
-)
+from FlightApp.utils import airports
 
 
 class LoginForm(forms.Form):
