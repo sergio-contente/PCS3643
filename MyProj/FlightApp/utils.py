@@ -1,11 +1,12 @@
+
 flightStatus = (
-    "EMBARCANDO",
-    "CANCELADO",
-    "PROGRAMADO",
-    "TAXIANDO",
-    "AUTORIZADO",
-    "EM VOO",
-    "ATERRISSADO"
+    ("1", "EMBARCANDO"),
+    ("2", "CANCELADO"),
+    ("3", "PROGRAMADO"),
+    ("4", "TAXIANDO"),
+    ("5", "AUTORIZADO"),
+    ("6", "EM VOO"),
+    ("7", "ATERRISSADO")
 )
 
 airports = (

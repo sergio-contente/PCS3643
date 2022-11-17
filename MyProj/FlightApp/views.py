@@ -14,17 +14,8 @@ tentativas = 0
 def ListaVoos(request):
     if request.method == "GET":
         flights = Voo.objects.all()
-        for flight in flights:
-            fixFlightAirportInfo(flight)
 
         return render(request, "ListaVoos.html", {'flights': flights, 'currFlight': ""})
-
-
-def fixFlightAirportInfo(flight: Voo):
-    flight.rota.aeroporto_destino = airports[int(
-        flight.rota.aeroporto_destino) - 1][1]
-    flight.rota.aeroporto_saida = airports[int(
-        flight.rota.aeroporto_saida) - 1][1]
 
 
 def deleteFlight(request, codigo):
@@ -60,13 +51,49 @@ def CadastrarVoo(request):
         return HttpResponseRedirect('/ListaVoos/')
 
 
-def AtualizarVoo(request):
-    return render(request, "AtualizarVoo.html")
+def AtualizarVoo(request, code: str):
+    flight: Voo = Voo.objects.get(codigo_voo=code)
+    if request.method == "POST":
+        form = updateFlightForm(request.POST)
+        if form.is_valid():
+            print('hier')
+            flight.companhia_aerea = form.cleaned_data["airline"]
+            flight.estado.status_voo = flightStatus[int(
+                form.cleaned_data["status"]) - 1][1]
+            flight.estado.save()
+            flight.rota.aeroporto_saida = airports[int(
+                form.cleaned_data["departureAirport"]) - 1][1]
+            flight.rota.aeroporto_destino = airports[int(
+                form.cleaned_data["destinationAirport"])-1][1]
+            flight.rota.save()
+            flight.previsao.partida_prevista = form.cleaned_data["estDepartureTime"]
+            flight.previsao.chegada_prevista = form.cleaned_data["estArrivalTime"]
+            flight.previsao.save()
+            flight.real.partida_real = form.cleaned_data["realDepartureTime"]
+            flight.real.chegada_real = form.cleaned_data["realArrivalTime"]
+            flight.real.save()
+            flight.save()
+            return HttpResponseRedirect('/MonitorarVoo/'+flight.codigo_voo)
+        else:
+            print("NOT HIERRRRRR")
+        #     messages.warning(
+        #         request, f"Login inválido. Número de tentativas restantes: {3 - tentativas}")
+        #     return HttpResponseRedirect('/MonitorarVoo/'+flight.codigo_voo)
+    else:
+        form = updateFlightForm(initial={
+            'status': flight.estado.status_voo,
+            'airline': flight.companhia_aerea,
+            'departureAirport': flight.rota.aeroporto_saida,
+            'destinationAirport': flight.rota.aeroporto_destino,
+            'estDepartureTime': flight.previsao.partida_prevista,
+            'estArrivalTime': flight.previsao.chegada_prevista,
+            'realDepartureTime': flight.real.partida_real,
+            'realArrivalTime': flight.real.chegada_real})
+        return render(request, "AtualizarVoo.html", {"form": form, "flight": flight})
 
 
 def MonitorarVoo(request, code):
     flight = Voo.objects.get(codigo_voo=code)
-    fixFlightAirportInfo(flight)
     return render(request, "MonitorarVoo.html", {"flight": flight})
 
 

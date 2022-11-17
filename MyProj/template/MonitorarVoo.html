@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="col-md-2">
-                <a href="/AtualizarVoo"><button type="button" class="btn btn-primary">
+                <a href="/AtualizarVoo/{{flight.codigo_voo}}"><button type="button" class="btn btn-primary">
                             Atualizar Voo
                         </button>
                     </a>
@@ -49,20 +49,30 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
+                                <label>Linha Aérea</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{flight.companhia_aerea}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
                                 <label>Rota</label>
                             </div>
                             <div class="col-md-6">
                                 <p>
-                                    {{flight.rota.aeroporto_saida}}-{{flight.rota.aeroporto_saida}}
+                                    {{flight.rota.aeroporto_saida}}-{{flight.rota.aeroporto_destino}}
                                 </p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <label>Horário Previsto de Saída</label>
+                                <label>Horário Previsto de Partida</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{flight.previsao.partida_prevista}}</p>
+                                <p>
+                                    {{flight.previsao.partida_prevista|date:"d/m/Y - H:i"}}
+                                </p>
                             </div>
                         </div>
                         <div class="row">
@@ -70,7 +80,9 @@
                                 <label>Horário Previsto de Chegada</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{flight.previsao.chegada_prevista}}</p>
+                                <p>
+                                    {{flight.previsao.chegada_prevista|date:"d/m/Y - H:i"}}
+                                </p>
                             </div>
                         </div>
                         <div class="row">
@@ -78,7 +90,9 @@
                                 <label>Horário Real de Partida</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{flight.real.partida_real}}</p>
+                                <p>
+                                    {{flight.real.partida_real|date:"d/m/Y - H:i"}}
+                                </p>
                             </div>
                         </div>
                         <div class="row">
@@ -86,7 +100,9 @@
                                 <label>Horário Real de Chegada</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{flight.real.chegada_real}}</p>
+                                <p>
+                                    {{flight.real.chegada_real|date:"d/m/Y - H:i"}}
+                                </p>
                             </div>
                         </div>
                         <div class="row">

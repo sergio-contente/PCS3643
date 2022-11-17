@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bootstrap demo</title>
+    <title>Atualizar Voo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous" />
 </head>
 
@@ -14,7 +14,7 @@
             <div class="col-md-4"></div>
             <div class="col-md-6">
                 <div class="profile-head">
-                    <h5>Código de Voo GRU00001</h5>
+                    <h5>Código de Voo {{flight.codigo_voo}}</h5>
                 </div>
             </div>
         </div>
@@ -22,72 +22,8 @@
             <div class="col-md-4"></div>
             <div class="col-md-8">
                 <div class="tab-content profile-tab" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Status</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Embarcando</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Rota</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>GRU-AAA-PARIS</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Aeroporto de Partida</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>GRU</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Aeroporto de Chegada</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Paris</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Horário Previsto de Saída</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>15:00</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Horário Previsto de Chegada</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>16:00</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Horário Real de Partida</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>16:00</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Horário Real de Chegada</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>16:00</p>
-                            </div>
-                        </div>
-                    </div>
+                    <form class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab" method="post">
+                        {% csrf_token %} {{ form }}
                 </div>
                 <div class="col-md-2" style="
                             display: flex;
@@ -95,15 +31,14 @@
                             height: 100%;
                             width: 100%;
                         ">
-                    <a href="/MonitorarVoo"><button type="button" class="btn btn-primary">
-                                Salvar Voo
-                            </button>
-                        </a>
-                    <a href="/MonitorarVoo"><button type="button" class="btn btn-secondary">
+                    <a><input type="submit" class="btn btn-primary" value="Salvar Voo" />
+                    </a>
+                    <a href="/MonitorarVoo/{{flight.codigo_voo}}" class="btn btn-secondary">
                                 Cancelar Alterações
-                            </button>
+                            
                         </a>
                 </div>
+                </form>
             </div>
         </div>
     </div>
