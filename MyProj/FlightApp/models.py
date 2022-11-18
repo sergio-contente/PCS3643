@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 from FlightApp.utils import flightStatus
+
 # Create your models here.
 
 
@@ -10,7 +11,7 @@ class HorarioReal(models.Model):
     chegada_real = models.DateTimeField(null=True, default=None)
 
     class Meta:
-        db_table = 'horarios_reais'
+        db_table = "horarios_reais"
 
 
 class Rota(models.Model):
@@ -19,16 +20,15 @@ class Rota(models.Model):
     aeroporto_saida = models.CharField(max_length=3, null=False)
 
     class Meta:
-        db_table = 'rotas'
+        db_table = "rotas"
 
 
 class Status(models.Model):
     id_status = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    status_voo = models.CharField(
-        max_length=20, null=False, default=flightStatus[0][1])
+    status_voo = models.CharField(max_length=20, null=False, default=flightStatus[0][1])
 
     class Meta:
-        db_table = 'status'
+        db_table = "status"
 
 
 class HorarioPrevisto(models.Model):
@@ -37,7 +37,7 @@ class HorarioPrevisto(models.Model):
     chegada_prevista = models.DateTimeField(null=False)
 
     class Meta:
-        db_table = 'horarios_previstos'
+        db_table = "horarios_previstos"
 
 
 class Voo(models.Model):
@@ -49,7 +49,7 @@ class Voo(models.Model):
     real = models.ForeignKey(HorarioReal, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'voos'
+        db_table = "voos"
 
 
 class Relatorio(models.Model):
@@ -60,4 +60,10 @@ class Relatorio(models.Model):
     data_geracao = models.DateTimeField(null=False)
 
     class Meta:
-        db_table = 'relatorios'
+        db_table = "relatorios"
+
+
+class User(models.Model):
+    username = models.CharField(primary_key=True, max_length=20, null=False)
+    password = models.CharField(max_length=100, null=False)
+    isLocked = models.BooleanField(default=False)

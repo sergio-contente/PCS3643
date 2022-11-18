@@ -26,7 +26,8 @@ urlpatterns = [
          views.deleteFlight, name='deleteFlight'),
     path('CadastrarVoo/', views.CadastrarVoo),
     path('AtualizarVoo/<str:code>', views.AtualizarVoo),
-    path('GerarRelatorios/', views.GerarRelatorios),
+    path('GerarRelatorioVoo/<str:code>', views.generateSingleReport),
+    path('GerarRelatorioDia/<str:day>', views.generateDailyReport),
     path('MonitorarVoo/<str:code>', views.MonitorarVoo, name="manageFlight"),
     path('', views.Login, name='Login'),
     path('Login/', views.Login)

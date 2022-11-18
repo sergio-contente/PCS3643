@@ -1,54 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Lista Voos</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+            crossorigin="anonymous"
+        />
+    </head>
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Lista Voos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous" />
-</head>
-
-<body class="p-3 mb-2 bg-dark text-white padding:">
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        <p style="color: black">Deletar Voo?</p>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <body class="p-3 mb-2 bg-dark text-white padding:">
+        <!-- Modal -->
+        <div
+            class="modal fade"
+            id="exampleModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            <p style="color: black">Deletar Voo?</p>
+                        </h5>
+                        <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                        >
                             <span aria-hidden="true">&times;</span>
                         </button>
-                </div>
-                <div class="modal-body">
-                    <p style="color: black">
-                        Tem certeza que quer deletar o Voo?
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    </div>
+                    <div class="modal-body">
+                        <p style="color: black">
+                            Tem certeza que quer deletar o Voo?
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-dismiss="modal"
+                        >
                             Fechar
                         </button>
-                    <div class="btn btn-primary">
-                        <a>Deletar</a>
+                        <div class="btn btn-primary">
+                            <a>Deletar</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Modal -->
+        <!-- Modal -->
 
-    <a href="/CadastrarVoo"><button type="button" class="btn btn-primary">
+        <a href="/CadastrarVoo"
+            ><button type="button" class="btn btn-primary">
                 Cadastrar Voo
             </button>
         </a>
-    <a href="/GerarRelatorios"><button type="button" class="btn btn-primary">
+        <a href="/GerarRelatorioDia/" id="genereteReport"
+            ><button type="button" class="btn btn-primary">
                 Gerar Relatório de Dia
             </button>
         </a>
-    <a href="/">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+        <a href="/">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="currentColor"
+                class="bi bi-box-arrow-left"
+                viewBox="0 0 16 16"
+            >
                 <path
                     fill-rule="evenodd"
                     d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"
@@ -58,64 +87,73 @@
                     d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"
                 />
             </svg>
-    </a>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-lg-12" id="content">
-                <input type="date" name="date" />
+        </a>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-lg-12" id="content">
+                    <input type="date" name="date" id="datePicker" />
+                </div>
             </div>
         </div>
-    </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-    {% block content %} {% if flights|length > 0 %}
-    <table class="table align-middle mb-0 bg-white">
-        <thead class="bg-light">
-            <tr>
-                <th>Código de Voo</th>
-                <th>Aeroporto de Saída</th>
-                <th>Aeroporto de Chegada</th>
-                <th>Horário Previsto de Saída</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for flight in flights %}
-            <tr>
-                <td>
-                    <div class="d-flex align-items-center">
-                        <!-- <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="" style="width: 45px; height: 45px" class="rounded-circle" /> -->
-                        <div class="ms-3">
-                            <p class="fw-bold mb-1">
-                                {{ flight.codigo_voo}}
-                            </p>
+        {% block content %} {% if flights|length > 0 %}
+        <table class="table align-middle mb-0 bg-white">
+            <thead class="bg-light">
+                <tr>
+                    <th>Código de Voo</th>
+                    <th>Aeroporto de Saída</th>
+                    <th>Aeroporto de Chegada</th>
+                    <th>Horário Previsto de Saída</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for flight in flights %}
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <!-- <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="" style="width: 45px; height: 45px" class="rounded-circle" /> -->
+                            <div class="ms-3">
+                                <p class="fw-bold mb-1">
+                                    {{ flight.codigo_voo}}
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                </td>
-                <td>
-                    <p class="fw-normal mb-1">
-                        {{flight.rota.aeroporto_saida}}
-                    </p>
-                </td>
-                <td>
-                    <p class="fw-normal mb-1">
-                        {{flight.rota.aeroporto_destino}}
-                    </p>
-                </td>
-                <td>{{flight.previsao.partida_prevista}}</td>
-                <td>
-                    <a href="/MonitorarVoo/{{flight.codigo_voo}}">
-                        <button type="button" class="btn btn-link btn-sm btn-rounded">
+                    </td>
+                    <td>
+                        <p class="fw-normal mb-1">
+                            {{flight.rota.aeroporto_saida}}
+                        </p>
+                    </td>
+                    <td>
+                        <p class="fw-normal mb-1">
+                            {{flight.rota.aeroporto_destino}}
+                        </p>
+                    </td>
+                    <td>{{flight.previsao.partida_prevista|date:"d/m/Y - H:i"}}</td>
+                    <td>
+                        <a href="/MonitorarVoo/{{flight.codigo_voo}}">
+                            <button
+                                type="button"
+                                class="btn btn-link btn-sm btn-rounded"
+                            >
                                 Detalhar
                             </button>
-                    </a>
-                </td>
-                <td>
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-flightCode="{{flight.codigo_voo}}">
+                        </a>
+                    </td>
+                    <td>
+                        <!-- Button trigger modal -->
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            data-toggle="modal"
+                            data-target="#exampleModal"
+                            data-flightCode="{{flight.codigo_voo}}"
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -133,27 +171,37 @@
                                 />
                             </svg>
                         </button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <span>No Data</span> {% endif %} {% endblock %}
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script>
-        $("#exampleModal").on("show.bs.modal", function(event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var flightCode = button.attr("data-flightCode"); // Extract flight code
-            var modal = $(this);
-            modal
-                .find(".modal-footer a")
-                .attr("href", "delete/" + flightCode);
-            console.log(modal.find(".modal-footer a"));
-        });
-    </script>
-</body>
-
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <span>No Data</span> {% endif %} {% endblock %}
+        <script
+            src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"
+        ></script>
+        <script>
+            $("#exampleModal").on("show.bs.modal", function (event) {
+                var button = $(event.relatedTarget); // Button that triggered the modal
+                var flightCode = button.attr("data-flightCode"); // Extract flight code
+                var modal = $(this);
+                modal
+                    .find(".modal-footer a")
+                    .attr("href", "delete/" + flightCode);
+            });
+        </script>
+    </body>
 </html>
