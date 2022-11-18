@@ -70,7 +70,6 @@ def AtualizarVoo(request, code: str):
     if request.method == "POST":
         form = updateFlightForm(request.POST)
         if form.is_valid():
-            print("hier")
             flight.companhia_aerea = form.cleaned_data["airline"]
             flight.estado.status_voo = flightStatus[
                 int(form.cleaned_data["status"]) - 1
@@ -132,7 +131,12 @@ def Login(request):
                     "Combinação usuário senha incorreta.",
                 )
                 return HttpResponseRedirect("/")
-
+            if currUser.profession == roles[3][1]:
+                messages.error(
+                    request,
+                    "Usuário não autorizado",
+                )
+                return HttpResponseRedirect("/")
             if currUser.counter == 1:
                 messages.error(
                     request,
