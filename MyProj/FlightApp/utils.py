@@ -1,4 +1,3 @@
-
 flightStatus = (
     ("1", "EMBARCANDO"),
     ("2", "CANCELADO"),
@@ -6,7 +5,7 @@ flightStatus = (
     ("4", "TAXIANDO"),
     ("5", "AUTORIZADO"),
     ("6", "EM VOO"),
-    ("7", "ATERRISSADO")
+    ("7", "ATERRISSADO"),
 )
 
 airports = (
@@ -15,5 +14,7 @@ airports = (
     ("3", "DFW"),
     ("4", "CAN"),
     ("5", "MEX"),
-    ("6", "DEL")
+    ("6", "DEL"),
 )
+
+roles = (("1", "admin"), ("2", "operator"), ("3", "employee"), ("4", "unauthorized"))

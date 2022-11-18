@@ -4,8 +4,8 @@ from FlightApp.models import User
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField()
-    password = forms.CharField()
+    username = forms.CharField(required=True)
+    password = forms.CharField(label="senha", required=True)
 
 
 class RegisterFlightForm(forms.Form):

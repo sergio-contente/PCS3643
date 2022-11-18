@@ -8,8 +8,6 @@ from FlightApp.forms import LoginForm
 
 
 # Create your views here.
-global tentativas
-tentativas = 0
 
 
 def ListaVoos(request):
@@ -120,35 +118,38 @@ def MonitorarVoo(request, code):
 
 
 def Login(request):
-    admin_cred = {"username": "admin", "password": "admin"}
-    operador = {"username": "operador", "password": "operador"}
-    funcionario = {"username": "funcionario", "password": "funcionario"}
-    global tentativas
     # if this is a POST request we need to process the form data
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
         form = LoginForm(request.POST)
-        if tentativas == 3:
-            messages.error(
-                request, "Número de tentativas ultrapassado. Acesso bloqueado."
-            )
-            return HttpResponseRedirect("/")
-            # check whether it's valid:
-        elif form.is_valid():
+        # check whether it's valid:
+        if form.is_valid():
+            if User.objects.filter(username=form.cleaned_data["username"]).exists():
+                currUser = User.objects.get(username=form.cleaned_data["username"])
+            else:
+                messages.error(
+                    request,
+                    "Combinação usuário senha incorreta.",
+                )
+                return HttpResponseRedirect("/")
+
+            if currUser.counter == 1:
+                messages.error(
+                    request,
+                    "Número de tentativas ultrapassado. Acesso bloqueado. Contate um administrador.",
+                )
+                return HttpResponseRedirect("/")
             # process the data in form.cleaned_data as required
-            credentials = form.cleaned_data
-            if (
-                credentials == admin_cred
-                or credentials == operador
-                or credentials == funcionario
-            ):
-                tentativas = 0
+            if form.cleaned_data["password"] == currUser.password:
+                currUser.counter = 3
+                currUser.save()
                 return HttpResponseRedirect("/ListaVoos/")
             else:
-                tentativas = tentativas + 1
+                currUser.counter -= 1
+                currUser.save()
                 messages.warning(
                     request,
-                    f"Login inválido. Número de tentativas restantes: {3 - tentativas}",
+                    f"Login inválido. Número de tentativas restantes: {currUser.counter}",
                 )
                 return HttpResponseRedirect("/")
             # ...

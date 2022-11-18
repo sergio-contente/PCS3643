@@ -1,6 +1,6 @@
 from django.db import models
 import uuid
-from FlightApp.utils import flightStatus
+from FlightApp.utils import *
 
 # Create your models here.
 
@@ -67,3 +67,10 @@ class User(models.Model):
     username = models.CharField(primary_key=True, max_length=20, null=False)
     password = models.CharField(max_length=100, null=False)
     isLocked = models.BooleanField(default=False)
+    counter = models.IntegerField(default=3)
+    profession = models.CharField(
+        choices=roles, max_length=20, null=False, default=roles[3]
+    )
+
+    class Meta:
+        db_table = "users"
