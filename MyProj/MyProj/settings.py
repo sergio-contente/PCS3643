@@ -67,12 +67,12 @@ TEMPLATES = [
             ],
         },
     },
-    {
-        "BACKEND": "django.template.backends.jinja2.Jinja2",
-        "DIRS": [],
-        "APP_DIRS": True,
-        "OPTIONS": {"environment": "your-app.jinja2.environment"},
-    },
+    # {
+    #     "BACKEND": "django.template.backends.jinja2.Jinja2",
+    #     "DIRS": [],
+    #     "APP_DIRS": True,
+    #     "OPTIONS": {"environment": "your-app.jinja2.environment"},
+    # },
 ]
 
 WSGI_APPLICATION = "MyProj.wsgi.application"

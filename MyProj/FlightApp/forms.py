@@ -17,7 +17,7 @@ class RegisterFlightForm(forms.Form):
     flightCode = forms.CharField(
         label="Código de Voo", validators=[flightCodeValidator]
     )
-    airline = forms.CharField(label="Linha Aérea")
+    airline = forms.ChoiceField(label="Linha Aérea", choices=airlines)
     departureAirport = forms.ChoiceField(choices=airports, label="Aeroporto de Saída")
     destinationAirport = forms.ChoiceField(
         choices=airports, label="Aeroporto de Partida"

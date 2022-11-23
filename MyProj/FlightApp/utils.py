@@ -25,3 +25,11 @@ roles = (
     ("4", "pilot"),
     ("5", "unauthorized"),
 )
+
+
+airlines = (
+    ("1", "TAM"),
+    ("2", "GOL"),
+    ("3", "AZL"),
+    ("4", "LATAM"),
+)

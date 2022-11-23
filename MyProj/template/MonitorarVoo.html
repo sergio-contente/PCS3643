@@ -87,8 +87,8 @@
           </li>
         {% endif %}
       </ol>
-      {% set a = 'a' %}
-      {%if role == "pilot" and  status in allowPilot %}
+      {%if role == "pilot" and  status in allowedPilot %}
+            {% if status != "ATERRISSADO"%}
     <a href="/MonitorarVoo/{{flight.codigo_voo}}/UpdateStatus/{{status}}/{{role}}"><button
         type="button"
         class="btn btn-primary"
@@ -96,21 +96,27 @@
         Próximo Status
     </button>
     </a>
-    {%elif role == "employee" and status == ""%}
-    {%elif role == "pilot" and status == ""%}
-    {%else%}
-    {%endif%}
-
-    {% if status != "ATERRISSADO"%}
-      <a href="/MonitorarVoo/{{flight.codigo_voo}}/UpdateStatus/{{status}}/{{role}}"><button
+            {%endif%}
+    {%elif role == "employee" and status in allowedEmployee %}
+    <a href="/MonitorarVoo/{{flight.codigo_voo}}/UpdateStatus/{{status}}/{{role}}"><button
         type="button"
         class="btn btn-primary"
     >
         Próximo Status
     </button>
-</a>
+    </a>
+
+    <a href="/MonitorarVoo/{{flight.codigo_voo}}/cancel"><button
+        type="button"
+        class="btn btn-primary"
+    >
+        Cancelar Voo
+    </button>
+    </a>
     {%else%}
-    {% endif %}
+    {%endif%}
+
+
       <!-- <div class="tab-content">
         <div class="tab-pane" id="basicExampleStep1">Step 1 content</div>
         <div class="tab-pane active" id="basicExampleStep2">Step 2 content</div>
@@ -138,8 +144,8 @@
             </div>
             {% if role == "operator" %}
             <div class="col-md-2">
-                <a href="/AtualizarVoo/{{flight.codigo_voo}}"><button type="button" class="btn btn-primary">
-                            Atualizar Voo
+                <a href="/AtualizarVoo/{{flight.codigo_voo}}/{{role}}"><button type="button" class="btn btn-primary">
+                            Atualizar Cadastro
                         </button>
                     </a>
             </div>
@@ -242,6 +248,7 @@
             </form>
             {% endif %}
         </div>
+        {% include 'messages.html' %}
     </div>
     {% endblock %}
       <script src="https://cdn.jsdelivr.net/npm/fastbootstrap@1.1.1/dist/js/fastbootstrap.min.js" integrity="sha256-EA7CcsZVlKgu1Vdk1Nsl648ddvyavbdyjR/vnaTuomk=" crossorigin="anonymous"></script>

@@ -27,6 +27,7 @@
                     <form class="tab-pane fade show active formWrapper" id="home" role="tabpanel" aria-labelledby="home-tab" method="post">
                         {% csrf_token %} {{ form }}
                 </div>
+                {% include 'messages.html' %}
                 <div class="col-md-2" style="
                             display: flex;
                             flex-direction: horizontal;
@@ -37,7 +38,6 @@
                     </a>
                     <a href="/MonitorarVoo/{{flight.codigo_voo}}" class="btn btn-secondary">
                                 Cancelar Alterações
-                            
                         </a>
                 </div>
                 </form>

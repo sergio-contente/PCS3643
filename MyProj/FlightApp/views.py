@@ -25,10 +25,13 @@ def ListaVoos(request):
             role = "Gerente"
         elif role == "employee":
             role = "Funcionário"
+        elif role == "operator":
+            role = "Operador"
+        
+        print(flights)
+
 
         return render(request, "ListaVoos.html", {"flights": flights, "role": role})
-    elif request.method == "POST":
-        print("test")
 
 
 def deleteFlight(request, codigo):
@@ -39,15 +42,18 @@ def deleteFlight(request, codigo):
 
 def generateDailyReport(request, day: str):
     print("><><>", day)
-    flights = Voo.objects.filter(
-        previsao=HorarioPrevisto.objects.filter(partida_prevista=day)
-    )
+    allFlights = Voo.objects.all()
+    flights = []
+    for flight in allFlights:
+        if flight.previsao.partida_prevista.strftime("%Y-%m-%d") == day:
+            flights.append(flight)
+
     return render(request, "GerarRelatorios.html", {"flights": flights})
 
 
 def generateSingleReport(request, code: str):
     flight = Voo.objects.get(codigo_voo=code)
-    return render(request, "GerarRelatorios.html", {"flights": flight})
+    return render(request, "GerarRelatorios.html", {"flights":flight})
 
 
 def CadastrarVoo(request):
@@ -58,30 +64,82 @@ def CadastrarVoo(request):
         form = RegisterFlightForm(request.POST)
         if form.is_valid():
             newFlightInfo = form.cleaned_data
-            Voo.objects.create(
-                codigo_voo=newFlightInfo["flightCode"],
-                companhia_aerea=newFlightInfo["airline"],
-                estado=Status.objects.create(),
-                rota=Rota.objects.create(
-                    aeroporto_destino=airports[
-                        int(newFlightInfo["destinationAirport"]) - 1
-                    ][1],
-                    aeroporto_saida=airports[
-                        int(newFlightInfo["departureAirport"]) - 1
-                    ][1],
-                ),
-                previsao=HorarioPrevisto.objects.create(
-                    partida_prevista=newFlightInfo["departureTime"],
-                    chegada_prevista=newFlightInfo["arrivalTime"],
-                ),
-                real=HorarioReal.objects.create(),
+            try:
+                date_checker = datetime.datetime.strptime(str(newFlightInfo["departureTime"]), '%Y-%m-%d %H:%M' + ':00+00:00')
+            except:
+                messages.error(
+            request,
+                "Formato de data de partida incorreto. O formato correto é: YY-MM-DD HH:MM",
             )
-            messages.success(request, "Voo cadastrado com sucesso!")
-            return HttpResponseRedirect("/CadastrarVoo/")
-        else:
-            messages.error(
+                return HttpResponseRedirect("/CadastrarVoo/")
+            else:
+                try:
+                    date_checker = datetime.datetime.strptime(str(newFlightInfo["arrivalTime"]), '%Y-%m-%d %H:%M' + ':00+00:00')
+                except:
+                    messages.error(
                 request,
-                "Formato de campo(s) incorreto)(s)",
+                    "Formato de data de chegada incorreto. O formato correto é: YY-MM-DD HH:MM",
+                )
+                    return HttpResponseRedirect("/CadastrarVoo/")
+                else:
+                    try:
+                        time_partida = newFlightInfo["departureTime"]
+                        time_chegada = newFlightInfo["arrivalTime"]
+                        if time_partida >= time_chegada:
+                            raise  TypeError("Horario de partida é maior ou igual que o de chegada.")
+                    except:
+                        messages.error(
+                    request,
+                        "Horario de partida é maior ou igual que o de chegada.",
+                    )
+                        return HttpResponseRedirect("/CadastrarVoo/")
+                    else:
+                        try:
+                            if newFlightInfo["destinationAirport"] == newFlightInfo["departureAirport"]:
+                                raise  TypeError("Aeroporto de saída é o mesmo que o de destino")
+                        except:
+                            messages.error(
+                            request,
+                            "Aeroporto de saída é o mesmo que o de destino",
+                            )
+                            return HttpResponseRedirect("/CadastrarVoo/")
+                        else:
+                            Voo.objects.create(
+                                codigo_voo=newFlightInfo["flightCode"],
+                                companhia_aerea=newFlightInfo["airline"],
+                                estado=Status.objects.create(),
+                                rota=Rota.objects.create(
+                                    aeroporto_destino=airports[
+                                        int(newFlightInfo["destinationAirport"]) - 1
+                                    ][1],
+                                    aeroporto_saida=airports[
+                                        int(newFlightInfo["departureAirport"]) - 1
+                                    ][1],
+                                ),
+                                previsao=HorarioPrevisto.objects.create(
+                                    partida_prevista=newFlightInfo["departureTime"],
+                                    chegada_prevista=newFlightInfo["arrivalTime"],
+                                ),
+                                real=HorarioReal.objects.create(),
+                            )
+                            messages.success(request, "Voo cadastrado com sucesso!")
+                            return HttpResponseRedirect("/CadastrarVoo/")
+        else:
+            newFlightInfo = form.cleaned_data
+            print(str(newFlightInfo["departureTime"]))
+            try:
+                date_checker = datetime.datetime.strptime(str(newFlightInfo["departureTime"]), '%Y-%m-%d %H:%M' + ':00+00:00')
+            except:
+                messages.error(
+            request,
+                "Formato de data de partida incorreto",
+            )
+            else:
+                #newFlightInfo = form.cleaned_data
+                print(form.errors.as_data())
+                messages.error(
+                request,
+                "Formato de data(s) incorreto)(s)",
             )
             return HttpResponseRedirect("/CadastrarVoo/")
     else:
@@ -89,38 +147,77 @@ def CadastrarVoo(request):
         return render(request, "CadastrarVoo.html", {"form": form})
 
 
-def AtualizarVoo(request, code: str):
+def AtualizarVoo(request, code: str, role):
     user: User = request.COOKIES.get("user")
     if user is None:
         return HttpResponseRedirect("/")
 
     flight: Voo = Voo.objects.get(codigo_voo=code)
     if request.method == "POST":
-        form = operatorForm(request.POST)
-        if form.is_valid():
-            flight.companhia_aerea = form.cleaned_data["airline"]
-            flight.estado.status_voo = flightStatus[
-                int(form.cleaned_data["status"]) - 1
-            ][1]
-            flight.estado.save()
-            flight.rota.aeroporto_saida = airports[
-                int(form.cleaned_data["departureAirport"]) - 1
-            ][1]
-            flight.rota.aeroporto_destino = airports[
-                int(form.cleaned_data["destinationAirport"]) - 1
-            ][1]
-            flight.rota.save()
-            flight.previsao.partida_prevista = form.cleaned_data["estDepartureTime"]
-            flight.previsao.chegada_prevista = form.cleaned_data["estArrivalTime"]
-            flight.previsao.save()
-            flight.real.partida_real = form.cleaned_data["realDepartureTime"]
-            flight.real.chegada_real = form.cleaned_data["realArrivalTime"]
-            flight.real.save()
-            flight.save()
 
-            return HttpResponseRedirect("/MonitorarVoo/" + flight.codigo_voo)
+        form = operatorForm(request.POST)
+
+        if form.is_valid():
+            newFlightInfo = form.cleaned_data
+            print("===========================")
+            print(newFlightInfo)
+            if role == "operator":
+                try:
+                    date_checker = datetime.datetime.strptime(str(newFlightInfo["estDepartureTime"]), '%Y-%m-%d %H:%M' + ':00+00:00')
+                except:
+                    messages.error(
+                request,
+                    "Formato de data de partida incorreto. O formato correto é: YY-MM-DD HH:MM",
+                )
+                    return HttpResponseRedirect("/AtualizarVoo/" + flight.codigo_voo + "/" + role)
+                else:
+                    try:
+                        date_checker = datetime.datetime.strptime(str(newFlightInfo["estArrivalTime"]), '%Y-%m-%d %H:%M' + ':00+00:00')
+                    except:
+                        messages.error(
+                    request,
+                        "Formato de data de chegada incorreto. O formato correto é: YY-MM-DD HH:MM",
+                    )
+                        return HttpResponseRedirect("/AtualizarVoo/" + flight.codigo_voo + "/" + role)
+                    else:
+                        try:
+                            time_partida = newFlightInfo["estDepartureTime"]
+                            time_chegada = newFlightInfo["estArrivalTime"]
+                            if time_partida >= time_chegada:
+                                raise  TypeError("Horario de partida é maior ou igual que o de chegada.")
+                        except:
+                            messages.error(
+                        request,
+                            "Horario de partida é maior ou igual que o de chegada.",
+                        )
+                            return HttpResponseRedirect("/AtualizarVoo/" + flight.codigo_voo + "/" + role)
+                        else:
+                            try:
+                                if newFlightInfo["destinationAirport"] == newFlightInfo["departureAirport"]:
+                                    raise  TypeError("Aeroporto de saída é o mesmo que o de destino")
+                            except:
+                                messages.error(
+                                request,
+                                "Aeroporto de saída é o mesmo que o de destino",
+                                )
+                                return HttpResponseRedirect("/AtualizarVoo/" + flight.codigo_voo + "/" + role)
+                            else:
+                                flight.companhia_aerea = form.cleaned_data["airline"]
+                                flight.rota.aeroporto_saida = airports[
+                                    int(form.cleaned_data["departureAirport"]) - 1
+                                ][1]
+                                flight.rota.aeroporto_destino = airports[
+                                    int(form.cleaned_data["destinationAirport"]) - 1
+                                ][1]
+                                flight.rota.save()
+                                flight.previsao.partida_prevista = form.cleaned_data["estDepartureTime"]
+                                flight.previsao.chegada_prevista = form.cleaned_data["estArrivalTime"]
+                                flight.previsao.save()
+                                flight.save()
+
+                            return HttpResponseRedirect("/AtualizarVoo/" + flight.codigo_voo + "/" + role)
     else:
-        form = pilotForm(
+        form = operatorForm(
             initial={
                 "realDepartureTime": flight.real.partida_real,
                 "realArrivalTime": flight.real.chegada_real,
@@ -141,14 +238,54 @@ def MonitorarVoo(request, code):
     if request.method == "POST":
         form = pilotForm(request.POST)
         if form.is_valid():
-            flight.real.partida_real = form.cleaned_data["realDepartureTime"]
-            flight.real.chegada_real = form.cleaned_data["realArrivalTime"]
+                newFlightInfo = form.cleaned_data
+                try:
+                    date_checker = datetime.datetime.strptime(str(newFlightInfo["realDepartureTime"]), '%Y-%m-%d %H:%M' + ':00+00:00')
+                except:
+                    messages.error(
+                request,
+                    "Formato de data de partida incorreto. O formato correto é: YY-MM-DD HH:MM",
+                )
+                    return HttpResponseRedirect("/MonitorarVoo/" + flight.codigo_voo)
+                else:
+                    try:
+                        date_checker = datetime.datetime.strptime(str(newFlightInfo["realArrivalTime"]), '%Y-%m-%d %H:%M' + ':00+00:00')
+                    except:
+                        messages.error(
+                    request,
+                        "Formato de data de chegada incorreto. O formato correto é: YY-MM-DD HH:MM",
+                    )
+                        return HttpResponseRedirect("/MonitorarVoo/" + flight.codigo_voo)
+                    else:
+                        try:
+                            time_partida = newFlightInfo["realDepartureTime"]
+                            time_chegada = newFlightInfo["realArrivalTime"]
+                            if time_partida >= time_chegada:
+                                raise  TypeError("Horario de partida é maior ou igual que o de chegada.")
+                            
+                        except:
+                            messages.error(
+                        request,
+                            "Horario de partida é maior ou igual que o de chegada.",
+                        )
+                            return HttpResponseRedirect("/MonitorarVoo/" + flight.codigo_voo)
+                        else:
+                            flight.real.partida_real = form.cleaned_data["realDepartureTime"]
+                            flight.real.chegada_real = form.cleaned_data["realArrivalTime"]
+                            flight.real.save()
+                            print(flight.real.chegada_real - flight.real.chegada_real)
+                            flight.erro = (flight.real.chegada_real - flight.real.partida_real).seconds
+                            flight.save()
+                            return HttpResponseRedirect("/MonitorarVoo/" + flight.codigo_voo)
+
     else:
         form = pilotForm()
+        allowedPilot = ["PROGRAMADO", "EM VOO", "ATERRISSADO", "TAXIANDO", "AUTORIZADO"]
+        allowedEmployee = ["EMBARCANDO", "PRONTO"]
         return render(
             request,
             "MonitorarVoo.html",
-            {"flight": flight, "role": role, "status": status, "form": form},
+            {"flight": flight, "role": role, "status": status, "form": form, "allowedPilot": allowedPilot, "allowedEmployee": allowedEmployee },
         )
 
 
@@ -227,3 +364,10 @@ def updateStatus(request, code, status, role):
     #     "MonitorarVoo.html",
     #     {"flight": flight, "role": role, "status": status},
     # )
+
+def cancelFlight(request, code):
+    flight = Voo.objects.get(codigo_voo=code)
+    flight.estado.status_voo = "CANCELADO"
+    flight.estado.save()
+    return HttpResponseRedirect("/MonitorarVoo/" + code)
+

@@ -59,15 +59,15 @@
         </div>
         <!-- Modal -->
         <h1>Bem Vindo, {{role}}</h1>
-        {% if role == 'operator' %}
+        {% if role == 'Operador' %}
         <a href="/CadastrarVoo"
             ><button type="button" class="btn btn-primary">
                 Cadastrar Voo
             </button>
         </a>
         {% endif %}
-        {% if role == 'manager' %}
-        <a href="/GerarRelatorioDia/" id="genereteReport"
+        {% if role == 'Gerente' %}
+        <a href="/ListaVoos/" id="generateReport"
             ><button type="button" class="btn btn-primary">
                 Gerar Relatório de Dia
             </button>
@@ -95,7 +95,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-12 col-lg-12" id="content">
-                    <input type="date" name="date" id="datePicker" />
+                    <input type="date" name="date" id="datePicker" onchange="updateDate()"/>
                 </div>
             </div>
         </div>
@@ -206,6 +206,21 @@
                     .find(".modal-footer a")
                     .attr("href", "delete/" + flightCode);
             });
+        </script>
+        <script>
+
+            function updateDate(){
+                var picker = document.getElementById("datePicker")
+                console.log(picker)
+                var submit = document.getElementById("generateReport")
+                if(!picker){
+                    href = "/ListaVoos/"
+                }
+                else{
+                    href = "/GerarRelatorioDia/"+picker.value
+                }
+                submit.setAttribute("href", href)
+            }
         </script>
     </body>
 </html>

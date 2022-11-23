@@ -18,8 +18,7 @@
                 <thead class="bg-light">
                     <tr>
                         <th>Código de Voo</th>
-                        <th>Data de Geração</th>
-                        <th>Tempo Real de Atraso</th>
+                        <th>Tempo Real de Atraso (s)</th>
                     </tr>
                 </thead>
                 <a class="btn btn-primary" href="javascript:history.back()" role="button">Fechar Relatório</a
@@ -37,17 +36,12 @@
                                 </div>
                             </td>
                             <td>
-                                <p class="fw-normal mb-1">01/01/2001 - 18:00</p>
-                            </td>
-                            <td>
-                                <p class="fw-normal mb-1">1h30min</p>
-                            </td>
-                            
-                            <td>
-                                <p class="fw-normal mb-1">01/01/2001 - 18:00</p>
-                            </td>
-                            <td>
-                                <p class="fw-normal mb-1">1h30min</p>
+                                <div class="d-flex align-items-center">
+                                    <!-- <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="" style="width: 45px; height: 45px" class="rounded-circle" /> -->
+                                    <div class="ms-3">
+                                        <p class="fw-bold mb-1">{{flight.erro}}</p>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}
@@ -57,23 +51,19 @@
                                 <div class="d-flex align-items-center">
                                     <!-- <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="" style="width: 45px; height: 45px" class="rounded-circle" /> -->
                                     <div class="ms-3">
-                                        <p class="fw-bold mb-1">{{flight.codigo_voo}}</p>
+                                        <p class="fw-bold mb-1">{{flights.codigo_voo}}</p>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <p class="fw-normal mb-1">01/01/2001 - 18:00</p>
+                                <div class="d-flex align-items-center">
+                                    <!-- <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="" style="width: 45px; height: 45px" class="rounded-circle" /> -->
+                                    <div class="ms-3">
+                                        <p class="fw-bold mb-1">{{flights.erro}}</p>
+                                    </div>
+                                </div>
                             </td>
-                            <td>
-                                <p class="fw-normal mb-1">1h30min</p>
-                            </td>
-                            
-                            <td>
-                                <p class="fw-normal mb-1">01/01/2001 - 18:00</p>
-                            </td>
-                            <td>
-                                <p class="fw-normal mb-1">1h30min</p>
-                            </td>
+
                         </tr>
                         {% endif %}
                     </tbody>
