@@ -1,3 +1,4 @@
+import datetime
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import messages
@@ -5,12 +6,16 @@ from FlightApp.forms import *
 from FlightApp.models import *
 from FlightApp.utils import airports
 from FlightApp.forms import LoginForm
+import json
 
 
 # Create your views here.
 
 
 def ListaVoos(request):
+    user = request.COOKIES.get("user")
+    if user is None:
+        return HttpResponseRedirect("/")
     if request.method == "GET":
         flights = Voo.objects.all()
 
@@ -39,6 +44,10 @@ def generateSingleReport(request, code: str):
 
 
 def CadastrarVoo(request):
+    user = request.COOKIES.get("user")
+    if user is None:
+        return HttpResponseRedirect("/")
+    user = json.loads(user)
     if request.method == "POST":
         form = RegisterFlightForm(request.POST)
         if form.is_valid():
@@ -48,8 +57,12 @@ def CadastrarVoo(request):
                 companhia_aerea=newFlightInfo["airline"],
                 estado=Status.objects.create(),
                 rota=Rota.objects.create(
-                    aeroporto_destino=newFlightInfo["destinationAirport"],
-                    aeroporto_saida=newFlightInfo["departureAirport"],
+                    aeroporto_destino=airports[
+                        int(newFlightInfo["destinationAirport"]) - 1
+                    ][1],
+                    aeroporto_saida=airports[
+                        int(newFlightInfo["departureAirport"]) - 1
+                    ][1],
                 ),
                 previsao=HorarioPrevisto.objects.create(
                     partida_prevista=newFlightInfo["departureTime"],
@@ -59,6 +72,12 @@ def CadastrarVoo(request):
             )
             messages.success(request, "Voo cadastrado com sucesso!")
             return HttpResponseRedirect("/CadastrarVoo/")
+        else:
+            messages.error(
+                request,
+                "Formato de campo(s) incorreto)(s)",
+            )
+            return HttpResponseRedirect("/CadastrarVoo/")
     else:
         form = RegisterFlightForm()
         return render(request, "CadastrarVoo.html", {"form": form})
@@ -66,9 +85,18 @@ def CadastrarVoo(request):
 
 
 def AtualizarVoo(request, code: str):
+    user: User = request.COOKIES.get("user")
+    if user is None:
+        return HttpResponseRedirect("/")
+
     flight: Voo = Voo.objects.get(codigo_voo=code)
     if request.method == "POST":
-        form = updateFlightForm(request.POST)
+        if user == "pilot":
+            form = pilotForm(request.POST)
+        elif user == "employee":
+            form = employeeForm(request.POST)
+        elif user == "operator":
+            form = operatorForm(request.POST)
         if form.is_valid():
             flight.companhia_aerea = form.cleaned_data["airline"]
             flight.estado.status_voo = flightStatus[
@@ -89,34 +117,50 @@ def AtualizarVoo(request, code: str):
             flight.real.chegada_real = form.cleaned_data["realArrivalTime"]
             flight.real.save()
             flight.save()
+
             return HttpResponseRedirect("/MonitorarVoo/" + flight.codigo_voo)
-        else:
-            print("NOT HIERRRRRR")
-        #     messages.warning(
-        #         request, f"Login inválido. Número de tentativas restantes: {3 - tentativas}")
-        #     return HttpResponseRedirect('/MonitorarVoo/'+flight.codigo_voo)
     else:
-        form = updateFlightForm(
-            initial={
-                "status": flight.estado.status_voo,
-                "airline": flight.companhia_aerea,
-                "departureAirport": flight.rota.aeroporto_saida,
-                "destinationAirport": flight.rota.aeroporto_destino,
-                "estDepartureTime": flight.previsao.partida_prevista,
-                "estArrivalTime": flight.previsao.chegada_prevista,
-                "realDepartureTime": flight.real.partida_real,
-                "realArrivalTime": flight.real.chegada_real,
-            }
+        print("<><><>", user)
+        if user == "pilot":
+            form = pilotForm(
+                initial={
+                    "status": flight.estado.status_voo,
+                    "realDepartureTime": flight.real.partida_real,
+                    "realArrivalTime": flight.real.chegada_real,
+                }
+            )
+        elif user == "employee":
+            form = employeeForm(initial={"status": flight.estado.status_voo})
+        elif user == "operator":
+            form = operatorForm(
+                initial={
+                    "status": flight.estado.status_voo,
+                    "airline": flight.companhia_aerea,
+                    "departureAirport": flight.rota.aeroporto_saida,
+                    "destinationAirport": flight.rota.aeroporto_destino,
+                    "estDepartureTime": flight.previsao.partida_prevista,
+                    "estArrivalTime": flight.previsao.chegada_prevista,
+                }
+            )
+        else:
+            form = managerForm()
+        return render(
+            request, "AtualizarVoo.html", {"form": form, "flight": flight, "user": user}
         )
-        return render(request, "AtualizarVoo.html", {"form": form, "flight": flight})
 
 
 def MonitorarVoo(request, code):
+    user = request.COOKIES.get("user")
+    if user is None:
+        return HttpResponseRedirect("/")
     flight = Voo.objects.get(codigo_voo=code)
     return render(request, "MonitorarVoo.html", {"flight": flight})
 
 
 def Login(request):
+    user = request.COOKIES.get("user")
+    if user is not None:
+        return HttpResponseRedirect("/ListaVoos")
     # if this is a POST request we need to process the form data
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
@@ -147,7 +191,9 @@ def Login(request):
             if form.cleaned_data["password"] == currUser.password:
                 currUser.counter = 3
                 currUser.save()
-                return HttpResponseRedirect("/ListaVoos/")
+                response = HttpResponseRedirect("/ListaVoos/")
+                response.set_cookie("user", currUser.profession)
+                return response
             else:
                 currUser.counter -= 1
                 currUser.save()
@@ -163,3 +209,9 @@ def Login(request):
     else:
         form = LoginForm()
         return render(request, "Login.html", {"form": form})
+
+
+def Logout(request):
+    response = HttpResponseRedirect("/")
+    response.delete_cookie("user")
+    return response

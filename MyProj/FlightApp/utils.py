@@ -1,12 +1,16 @@
-flightStatus = (
+employee = (
     ("1", "EMBARCANDO"),
     ("2", "CANCELADO"),
     ("3", "PROGRAMADO"),
-    ("4", "TAXIANDO"),
     ("5", "AUTORIZADO"),
-    ("6", "EM VOO"),
-    ("7", "ATERRISSADO"),
 )
+
+pilot = (
+    ("1", "TAXIANDO"),
+    ("3", "EM VOO"),
+    ("4", "ATERRISSADO"),
+)
+
 
 airports = (
     ("1", "ATL"),
@@ -17,4 +21,10 @@ airports = (
     ("6", "DEL"),
 )
 
-roles = (("1", "admin"), ("2", "operator"), ("3", "employee"), ("4", "unauthorized"))
+roles = (
+    ("1", "manager"),
+    ("2", "operator"),
+    ("3", "employee"),
+    ("4", "pilot"),
+    ("5", "unauthorized"),
+)
