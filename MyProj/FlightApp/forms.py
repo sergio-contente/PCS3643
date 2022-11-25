@@ -26,12 +26,8 @@ class RegisterFlightForm(forms.Form):
     arrivalTime = forms.DateTimeField(label="Chegada Prevista")
 
 
-class employeeForm(forms.Form):
-    status = forms.ChoiceField(choices=employee)
-
-
-class managerForm(forms.Form):
-    status = forms.ChoiceField(choices=employee)
+class generalForm(forms.Form):
+    status = forms.ChoiceField(choices=flightStatus)
     airline = forms.CharField(label="Linha Aérea")
     departureAirport = forms.ChoiceField(choices=airports, label="Aeroporto de Saída")
     destinationAirport = forms.ChoiceField(
@@ -54,7 +50,6 @@ class operatorForm(forms.Form):
 
 
 class pilotForm(forms.Form):
-    status = forms.ChoiceField(choices=pilot)
     realDepartureTime = forms.DateTimeField(label="Partida Real", required=False)
     realArrivalTime = forms.DateTimeField(label="Chegada Real", required=False)
 

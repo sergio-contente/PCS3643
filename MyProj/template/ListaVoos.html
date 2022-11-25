@@ -58,18 +58,22 @@
             </div>
         </div>
         <!-- Modal -->
-
+        <h1>Bem Vindo, {{role}}</h1>
+        {% if role == 'operator' %}
         <a href="/CadastrarVoo"
             ><button type="button" class="btn btn-primary">
                 Cadastrar Voo
             </button>
         </a>
+        {% endif %}
+        {% if role == 'manager' %}
         <a href="/GerarRelatorioDia/" id="genereteReport"
             ><button type="button" class="btn btn-primary">
                 Gerar Relatório de Dia
             </button>
         </a>
-        <a href="/">
+        {% endif %}
+        <a href="/Logout">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"

@@ -1,16 +1,13 @@
-employee = (
-    ("1", "EMBARCANDO"),
-    ("2", "CANCELADO"),
+flightStatus = (
+    ("1", "CANCELADO"),
+    ("2", "EMBARCANDO"),
     ("3", "PROGRAMADO"),
-    ("5", "AUTORIZADO"),
+    ("4", "TAXIANDO"),
+    ("5", "PRONTO"),
+    ("6", "AUTORIZADO"),
+    ("7", "EM VOO"),
+    ("8", "ATERRISSADO"),
 )
-
-pilot = (
-    ("1", "TAXIANDO"),
-    ("3", "EM VOO"),
-    ("4", "ATERRISSADO"),
-)
-
 
 airports = (
     ("1", "ATL"),

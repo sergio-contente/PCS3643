@@ -13,13 +13,20 @@ import json
 
 
 def ListaVoos(request):
-    user = request.COOKIES.get("user")
-    if user is None:
+    role = request.COOKIES.get("user")
+    if role is None:
         return HttpResponseRedirect("/")
     if request.method == "GET":
         flights = Voo.objects.all()
 
-        return render(request, "ListaVoos.html", {"flights": flights, "currFlight": ""})
+        if role == "pilot":
+            role = "Piloto"
+        elif role == "manager":
+            role = "Gerente"
+        elif role == "employee":
+            role = "Funcionário"
+
+        return render(request, "ListaVoos.html", {"flights": flights, "role": role})
     elif request.method == "POST":
         print("test")
 
@@ -47,7 +54,6 @@ def CadastrarVoo(request):
     user = request.COOKIES.get("user")
     if user is None:
         return HttpResponseRedirect("/")
-    user = json.loads(user)
     if request.method == "POST":
         form = RegisterFlightForm(request.POST)
         if form.is_valid():
@@ -81,7 +87,6 @@ def CadastrarVoo(request):
     else:
         form = RegisterFlightForm()
         return render(request, "CadastrarVoo.html", {"form": form})
-        return HttpResponseRedirect("/ListaVoos/")
 
 
 def AtualizarVoo(request, code: str):
@@ -91,12 +96,7 @@ def AtualizarVoo(request, code: str):
 
     flight: Voo = Voo.objects.get(codigo_voo=code)
     if request.method == "POST":
-        if user == "pilot":
-            form = pilotForm(request.POST)
-        elif user == "employee":
-            form = employeeForm(request.POST)
-        elif user == "operator":
-            form = operatorForm(request.POST)
+        form = operatorForm(request.POST)
         if form.is_valid():
             flight.companhia_aerea = form.cleaned_data["airline"]
             flight.estado.status_voo = flightStatus[
@@ -120,41 +120,36 @@ def AtualizarVoo(request, code: str):
 
             return HttpResponseRedirect("/MonitorarVoo/" + flight.codigo_voo)
     else:
-        print("<><><>", user)
-        if user == "pilot":
-            form = pilotForm(
-                initial={
-                    "status": flight.estado.status_voo,
-                    "realDepartureTime": flight.real.partida_real,
-                    "realArrivalTime": flight.real.chegada_real,
-                }
-            )
-        elif user == "employee":
-            form = employeeForm(initial={"status": flight.estado.status_voo})
-        elif user == "operator":
-            form = operatorForm(
-                initial={
-                    "status": flight.estado.status_voo,
-                    "airline": flight.companhia_aerea,
-                    "departureAirport": flight.rota.aeroporto_saida,
-                    "destinationAirport": flight.rota.aeroporto_destino,
-                    "estDepartureTime": flight.previsao.partida_prevista,
-                    "estArrivalTime": flight.previsao.chegada_prevista,
-                }
-            )
-        else:
-            form = managerForm()
+        form = pilotForm(
+            initial={
+                "realDepartureTime": flight.real.partida_real,
+                "realArrivalTime": flight.real.chegada_real,
+            }
+        )
+
         return render(
             request, "AtualizarVoo.html", {"form": form, "flight": flight, "user": user}
         )
 
 
 def MonitorarVoo(request, code):
-    user = request.COOKIES.get("user")
-    if user is None:
+    role = request.COOKIES.get("user")
+    if role is None:
         return HttpResponseRedirect("/")
     flight = Voo.objects.get(codigo_voo=code)
-    return render(request, "MonitorarVoo.html", {"flight": flight})
+    status = flight.estado.status_voo
+    if request.method == "POST":
+        form = pilotForm(request.POST)
+        if form.is_valid():
+            flight.real.partida_real = form.cleaned_data["realDepartureTime"]
+            flight.real.chegada_real = form.cleaned_data["realArrivalTime"]
+    else:
+        form = pilotForm()
+        return render(
+            request,
+            "MonitorarVoo.html",
+            {"flight": flight, "role": role, "status": status, "form": form},
+        )
 
 
 def Login(request):
@@ -175,7 +170,7 @@ def Login(request):
                     "Combinação usuário senha incorreta.",
                 )
                 return HttpResponseRedirect("/")
-            if currUser.profession == roles[3][1]:
+            if currUser.profession in roles[4][1]:
                 messages.error(
                     request,
                     "Usuário não autorizado",
@@ -215,3 +210,20 @@ def Logout(request):
     response = HttpResponseRedirect("/")
     response.delete_cookie("user")
     return response
+
+
+def updateStatus(request, code, status, role):
+    flight = Voo.objects.get(codigo_voo=code)
+    currIdx: int
+    for idx in range(0, len(flightStatus)):
+        if status == flightStatus[idx][1]:
+            currIdx = idx
+    newIdx = currIdx + 1
+    flight.estado.status_voo = flightStatus[newIdx][1]
+    flight.estado.save()
+    return HttpResponseRedirect("/MonitorarVoo/" + code)
+    # return render(
+    #     request,
+    #     "MonitorarVoo.html",
+    #     {"flight": flight, "role": role, "status": status},
+    # )

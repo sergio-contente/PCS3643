@@ -17,18 +17,22 @@ from django.contrib import admin
 from django.urls import path
 from FlightApp import views
 
-app_name = 'flightApp'
+app_name = "flightApp"
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('ListaVoos/', views.ListaVoos),
-    path('ListaVoos/delete/<str:codigo>',
-         views.deleteFlight, name='deleteFlight'),
-    path('CadastrarVoo/', views.CadastrarVoo),
-    path('AtualizarVoo/<str:code>', views.AtualizarVoo),
-    path('GerarRelatorioVoo/<str:code>', views.generateSingleReport),
-    path('GerarRelatorioDia/<str:day>', views.generateDailyReport),
-    path('MonitorarVoo/<str:code>', views.MonitorarVoo, name="manageFlight"),
-    path('', views.Login, name='Login'),
-    path('Login/', views.Login)
+    path("admin/", admin.site.urls),
+    path("ListaVoos/", views.ListaVoos),
+    path("ListaVoos/delete/<str:codigo>", views.deleteFlight, name="deleteFlight"),
+    path("CadastrarVoo/", views.CadastrarVoo),
+    path("AtualizarVoo/<str:code>", views.AtualizarVoo),
+    path("GerarRelatorioVoo/<str:code>", views.generateSingleReport),
+    path("GerarRelatorioDia/<str:day>", views.generateDailyReport),
+    path("MonitorarVoo/<str:code>", views.MonitorarVoo, name="manageFlight"),
+    path("", views.Login, name="Login"),
+    path("Login/", views.Login),
+    path("Logout/", views.Logout),
+    path(
+        "MonitorarVoo/<str:code>/UpdateStatus/<str:status>/<str:role>",
+        views.updateStatus,
+    ),
 ]
