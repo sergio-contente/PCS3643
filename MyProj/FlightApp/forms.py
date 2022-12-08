@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import ModelForm, TextInput, PasswordInput
 from django.core.validators import RegexValidator
 from FlightApp.utils import *
 from FlightApp.models import User
@@ -8,9 +9,9 @@ flightCodeValidator = RegexValidator(
 )
 
 
-class LoginForm(forms.Form):
-    username = forms.CharField(required=True)
-    password = forms.CharField(label="senha", required=True)
+# class LoginForm(forms.Form):
+#     username = forms.CharField(required=True, label=False)
+#     password = forms.CharField(required=True, label=False)
 
 
 class RegisterFlightForm(forms.Form):
@@ -67,8 +68,31 @@ class DailyReportDateForm(forms.Form):
 
 
 class UserForm(forms.ModelForm):
+    password = forms.CharField(required=True)
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = ["password"]
+
+
+class LoginForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ["username", "password"]
+        widgets = {
+            "username": TextInput(
+                attrs={
+                    "class": "form-control form-control-lg",
+                    "id": "form3example3",
+                    "placeholder": "Usuário",
+                }
+            ),
+            "password": PasswordInput(
+                attrs={
+                    "class": "form-control form-control-lg",
+                    "id": "form3example4",
+                    "placeholder": "Senha",
+                }
+            ),
+        }

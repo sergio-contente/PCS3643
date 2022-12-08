@@ -2,45 +2,50 @@
 <html lang="en">
 
 <head>
+    {% load static %}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
 </head>
 
 <body>
-    <section class="vh-100">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-6 text-black">
-                    <div class="px-5 ms-xl-4">
-                        <i class="fas fa-crow fa-2x me-3 pt-5 mt-xl-4" style="color: #709085"></i>
-                        <span class="h1 fw-bold mb-0">Contente&DelLano</span
-                            >
-                        </div>
 
-                        <div
-                            class="d-flex align-items-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5"
-                        >
-                            <form style="width: 23rem" method="post">
-                                <div class="pt-1 mb-4">
-                                    {% csrf_token %} {{ form }}
-                                    <input type="submit" value="Login" />
-                                </div>
-                                {% include 'messages.html' %}
-                            </form>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 px-0 d-none d-sm-block">
-                        <img
-                            src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.fonewalls.com%2Fwp-content%2Fuploads%2F2020%2F04%2FAirplane-Phone-Wallpaper.jpg&f=1&nofb=1&ipt=d91728f4afb61301368e7a82fb035d6a0d14858dda8877b0e64b7f28b823ad18&ipo=images"
-                            alt="Login image"
-                            class="w-100 vh-100"
-                            style="object-fit: cover; object-position: left"
-                        />
-                    </div>
+    <section class="vh-100">
+        <div class="container-fluid h-custom">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-md-9 col-lg-6 col-xl-5">
+                    <img src="../static/images/world.svg"
+                    class="img-fluid" alt="Sample image">
                 </div>
-            </div>
-        </section>
+                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                    <form method="post">
+                        <form  method="post">
+                                        {% csrf_token %} 
+                                        
+                                        <div class="form-outline mb-4">
+             {{form.username}}
+                                                          <label class="form-label" for="form3Example3">Usuário</label>
+                                        </div>
+                                        <!-- Password input -->
+                                        <div class="form-outline mb-3">
+{{form.password}}
+                                          <label class="form-label" for="form3Example4">Senha</label>
+                                        </div>
+                              
+                            <div class="pt-1 mb-4">
+                               <div> 
+                                <input class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem; background-color: #e46a68;" type="submit" value="Login" />
+                            </div>
+                            </div>
+                            {% include 'messages.html' %}
+                        </form>
+                                    </div>
+                                  </div>
+                                </div>
+   
+                              </section>
+
     </body>
 </html>
