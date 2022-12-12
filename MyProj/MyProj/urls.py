@@ -22,6 +22,7 @@ app_name = "flightApp"
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("ListaVoos/", views.ListaVoos),
+    path("ListaVoos/Chegadas", views.ListaVoosChegadas),
     path("ListaVoos/delete/<str:codigo>", views.deleteFlight, name="deleteFlight"),
     path("CadastrarVoo/", views.CadastrarVoo),
     path("AtualizarVoo/<str:code>/<str:role>", views.AtualizarVoo),
@@ -35,7 +36,7 @@ urlpatterns = [
         "MonitorarVoo/<str:code>/UpdateStatus/<str:status>/<str:role>",
         views.updateStatus,
     ),
-        path(
+    path(
         "MonitorarVoo/<str:code>/cancel/",
         views.cancelFlight,
     ),

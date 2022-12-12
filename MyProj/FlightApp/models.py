@@ -47,7 +47,7 @@ class Voo(models.Model):
     rota = models.ForeignKey(Rota, on_delete=models.CASCADE)
     previsao = models.ForeignKey(HorarioPrevisto, on_delete=models.CASCADE)
     real = models.ForeignKey(HorarioReal, on_delete=models.CASCADE)
-    erro = models.IntegerField(null = True)
+    erro = models.IntegerField(null=True)
 
     class Meta:
         db_table = "voos"

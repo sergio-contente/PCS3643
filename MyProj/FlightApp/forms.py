@@ -9,22 +9,76 @@ flightCodeValidator = RegexValidator(
 )
 
 
-# class LoginForm(forms.Form):
+# class AbstractUser(forms.Form):
 #     username = forms.CharField(required=True, label=False)
 #     password = forms.CharField(required=True, label=False)
 
 
 class RegisterFlightForm(forms.Form):
     flightCode = forms.CharField(
-        label="Código de Voo", validators=[flightCodeValidator]
+        label="Código de Voo",
+        validators=[flightCodeValidator],
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "id": "form3example3",
+                "placeholder": "Código de Voo",
+            }
+        ),
     )
-    airline = forms.ChoiceField(label="Linha Aérea", choices=airlines)
-    departureAirport = forms.ChoiceField(choices=airports, label="Aeroporto de Saída")
+    airline = forms.ChoiceField(
+        label="Linha Aérea",
+        choices=airlines,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "id": "form3example3",
+                "placeholder": "Linha Aérea",
+            }
+        ),
+    )
+    departureAirport = forms.ChoiceField(
+        choices=airports,
+        label="Aeroporto de Saída",
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "id": "form3example3",
+                "placeholder": "Aeroporto de Saída",
+            }
+        ),
+    )
     destinationAirport = forms.ChoiceField(
-        choices=airports, label="Aeroporto de Partida"
+        choices=airports,
+        label="Aeroporto de Partida",
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "id": "form3example3",
+                "placeholder": "Aeroporto de Partida",
+            }
+        ),
     )
-    departureTime = forms.DateTimeField(label="Partida Prevista")
-    arrivalTime = forms.DateTimeField(label="Chegada Prevista")
+    departureTime = forms.DateTimeField(
+        label="Partida Prevista",
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "id": "form3example3",
+                "placeholder": "Partida Prevista",
+            }
+        ),
+    )
+    arrivalTime = forms.DateTimeField(
+        label="Chegada Prevista",
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "id": "form3example3",
+                "placeholder": "Chegada Prevista",
+            }
+        ),
+    )
 
 
 class generalForm(forms.Form):
@@ -51,8 +105,28 @@ class operatorForm(forms.Form):
 
 
 class pilotForm(forms.Form):
-    realDepartureTime = forms.DateTimeField(label="Partida Real", required=False)
-    realArrivalTime = forms.DateTimeField(label="Chegada Real", required=False)
+    realDepartureTime = forms.DateTimeField(
+        required=False,
+        label=False,
+        widget=forms.DateTimeInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "id": "form3example3",
+                "placeholder": "Partida Real",
+            }
+        ),
+    )
+    realArrivalTime = forms.DateTimeField(
+        required=False,
+        label=False,
+        widget=forms.DateTimeInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "id": "form3example4",
+                "placeholder": "Senha",
+            }
+        ),
+    )
 
 
 class DailyReportDateForm(forms.Form):
@@ -67,32 +141,31 @@ class DailyReportDateForm(forms.Form):
     )
 
 
-class UserForm(forms.ModelForm):
-    password = forms.CharField(required=True)
-    password = forms.CharField(widget=forms.PasswordInput)
+# class UserForm(forms.ModelForm):
+#     password = forms.CharField(required=True)
+#     password = forms.CharField(widget=forms.PasswordInput)
 
-    class Meta:
-        model = User
-        fields = ["password"]
+#     class Meta:
+#         model = User
+#         fields = ["password"]
 
 
-class LoginForm(ModelForm):
-    class Meta:
-        model = User
-        fields = ["username", "password"]
-        widgets = {
-            "username": TextInput(
-                attrs={
-                    "class": "form-control form-control-lg",
-                    "id": "form3example3",
-                    "placeholder": "Usuário",
-                }
-            ),
-            "password": PasswordInput(
-                attrs={
-                    "class": "form-control form-control-lg",
-                    "id": "form3example4",
-                    "placeholder": "Senha",
-                }
-            ),
-        }
+class LoginForm(forms.Form):
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "id": "form3example3",
+                "placeholder": "Usuário",
+            }
+        )
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "id": "form3example4",
+                "placeholder": "Senha",
+            }
+        )
+    )

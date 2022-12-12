@@ -2,20 +2,33 @@
 <html lang="en">
     
     <head>
+    {% load static %}
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Monitorar Voo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous" />
     <link href="https://cdn.jsdelivr.net/npm/fastbootstrap@1.1.1/dist/css/fastbootstrap.min.css" rel="stylesheet" integrity="sha256-Yzz+k0rjOAAPX4Nkr73zQvppd6buXomR9n4uQ5lrSYE=" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
 </head>
 
 <body>
     {% block content %}
 
+<div class="mainWrapper">
+    <div class="col-md-4" style="margin-bottom: 1.6em">
+        <a href="/ListaVoos">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#e46a68" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                    <path
+                        fill-rule="evenodd"
+                        d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+                    />
+                </svg>
+        </a>
+    </div>
 
-    <ol class="progress-tracker" id="basicProgressTracker">
-        <li class="progress-tracker-item completed" aria-current="true" data-bs-target="#basicExampleStep1">
-            <span class="progress-tracker-label">Não Iniciado</span>
+    <ol class="progress-tracker" id="basicProgressTracker" >
+        <li class="progress-tracker-item completed" aria-current="true" data-bs-target="#basicExampleStep1" >
+            <span  class="progress-tracker-label">Não Iniciado</span>
           </li>
         {% if status == "EMBARCANDO" %}
         <li class="progress-tracker-item active" aria-current="true" data-bs-target="#EMBARCANDO">
@@ -86,21 +99,23 @@
             <span class="progress-tracker-label">Aterrissado</span>
           </li>
         {% endif %}
-      </ol>
-      {%if role == "pilot" and  status in allowedPilot %}
+    </ol>
+    {%if role == "pilot" and  status in allowedPilot %}
             {% if status != "ATERRISSADO"%}
-    <a href="/MonitorarVoo/{{flight.codigo_voo}}/UpdateStatus/{{status}}/{{role}}"><button
-        type="button"
-        class="btn btn-primary"
-    >
-        Próximo Status
-    </button>
-    </a>
+            <a href="/MonitorarVoo/{{flight.codigo_voo}}/UpdateStatus/{{status}}/{{role}}"><button
+                type="button"
+                class="btn btn-primary"
+            >
+                Próximo Status
+            </button>
+            </a>
             {%endif%}
+
     {%elif role == "employee" and status in allowedEmployee %}
-    <a href="/MonitorarVoo/{{flight.codigo_voo}}/UpdateStatus/{{status}}/{{role}}"><button
+    <a href="/MonitorarVoo/{{flight.codigo_voo}}/UpdateStatus/{{status}}/{{role}}"  ><button 
         type="button"
         class="btn btn-primary"
+       
     >
         Próximo Status
     </button>
@@ -127,17 +142,7 @@
 
     <div class="container emp-profile">
         <div class="row">
-            <div class="col-md-4">
-                <a href="/ListaVoos">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                            <path
-                                fill-rule="evenodd"
-                                d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
-                            />
-                        </svg>
-                </a>
-            </div>
-            <div class="col-md-6">
+            <div class="col-md-6" style="margin-top: 1.6em">
                 <div class="profile-head">
                     <h5>Código de Voo {{flight.codigo_voo}}</h5>
                 </div>
@@ -154,8 +159,7 @@
             {% endif %}
         </div>
         <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-8">
+            <div class="col-md-7" style="margin-bottom: 1.6em; margin-top: 1.6em">
                 <div class="tab-content profile-tab" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                         <div class="row">
@@ -241,15 +245,31 @@
                 </div>
             </div>
             {% if role == "pilot" %}
-            <form method="post">
-                {% csrf_token %}
-                <div class="formWrapper">{{ form }}</div>
-                <input type="submit" value="Atualizar" />
+            <form method="post" >
+                {% csrf_token %} 
+                                        
+                <div class="form-outline mb-4" >
+{{form.realDepartureTime}}
+                                  <label class="form-label" for="form3Example3">Horário Real de Partida</label>
+                </div>
+                <!-- Password input -->
+                <div class="form-outline mb-3">
+{{form.realArrivalTime}}
+                  <label class="form-label" for="form3Example4">Horário Real de Chegada</label>
+                </div>
+      
+    <div class="pt-1 mb-4">
+       <div> 
+        <input class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem; background-color: #e46a68;" type="submit" value="Atualizar" />
+    </div>
+    </div>
+    {% include 'messages.html' %}
             </form>
             {% endif %}
         </div>
         {% include 'messages.html' %}
     </div>
+</div>
     {% endblock %}
       <script src="https://cdn.jsdelivr.net/npm/fastbootstrap@1.1.1/dist/js/fastbootstrap.min.js" integrity="sha256-EA7CcsZVlKgu1Vdk1Nsl648ddvyavbdyjR/vnaTuomk=" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/fastbootstrap@1.1.1/dist/js/fastbootstrap.min.js"></script>
