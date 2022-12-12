@@ -154,38 +154,34 @@ def CadastrarVoo(request):
                             return HttpResponseRedirect("/CadastrarVoo/")
                         else:
                             try:
-                                flight_code = newFlightInfo["codigo_voo"]
+                                flight_code = newFlightInfo["flightCode"]
                                 tem_voo = Voo.objects.get(codigo_voo=flight_code)
-                                if tem_voo == None:
-                                    raise TypeError(
-                                        "Voo já cadastrado."
-                                    )
-                            except:
+                            except Voo.DoesNotExist:
+                                Voo.objects.create(
+                                codigo_voo=newFlightInfo["flightCode"],
+                                companhia_aerea=newFlightInfo["airline"],
+                                estado=Status.objects.create(),
+                                rota=Rota.objects.create(
+                                    aeroporto_destino=airports[
+                                        int(newFlightInfo["destinationAirport"]) - 1
+                                    ][1],
+                                    aeroporto_saida=airports[
+                                        int(newFlightInfo["departureAirport"]) - 1
+                                    ][1],
+                                ),
+                                previsao=HorarioPrevisto.objects.create(
+                                    partida_prevista=newFlightInfo["departureTime"],
+                                    chegada_prevista=newFlightInfo["arrivalTime"],
+                                ),
+                                real=HorarioReal.objects.create(),
+                                )
+                                messages.success(request, "Voo cadastrado com sucesso!")
+                                return HttpResponseRedirect("/CadastrarVoo/")
+                            else:
                                 messages.error(
                                     request,
                                     "Voo já cadastrado.",
                                  )
-                                return HttpResponseRedirect("/CadastrarVoo/")
-                            else:
-                                Voo.objects.create(
-                                    codigo_voo=newFlightInfo["flightCode"],
-                                    companhia_aerea=newFlightInfo["airline"],
-                                    estado=Status.objects.create(),
-                                    rota=Rota.objects.create(
-                                        aeroporto_destino=airports[
-                                            int(newFlightInfo["destinationAirport"]) - 1
-                                        ][1],
-                                        aeroporto_saida=airports[
-                                            int(newFlightInfo["departureAirport"]) - 1
-                                        ][1],
-                                    ),
-                                    previsao=HorarioPrevisto.objects.create(
-                                        partida_prevista=newFlightInfo["departureTime"],
-                                        chegada_prevista=newFlightInfo["arrivalTime"],
-                                    ),
-                                    real=HorarioReal.objects.create(),
-                                )
-                                messages.success(request, "Voo cadastrado com sucesso!")
                                 return HttpResponseRedirect("/CadastrarVoo/")
         else:
             newFlightInfo = form.cleaned_data
