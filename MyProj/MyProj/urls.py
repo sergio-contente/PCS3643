@@ -17,12 +17,27 @@ from django.contrib import admin
 from django.urls import path
 from FlightApp import views
 
+app_name = "flightApp"
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('ListaVoos/', views.ListaVoos),
-    path('CadastrarVoo/', views.CadastrarVoo),
-    path('AtualizarVoo/', views.AtualizarVoo),
-    path('GerarRelatorios/', views.GerarRelatorios),
-    path('MonitorarVoo/', views.MonitorarVoo),
-    path('', views.Login, name='Login')
+    path("admin/", admin.site.urls),
+    path("ListaVoos/", views.ListaVoos),
+    path("ListaVoos/Chegadas", views.ListaVoosChegadas),
+    path("ListaVoos/delete/<str:codigo>", views.deleteFlight, name="deleteFlight"),
+    path("CadastrarVoo/", views.CadastrarVoo),
+    path("AtualizarVoo/<str:code>/<str:role>", views.AtualizarVoo),
+    path("GerarRelatorioVoo/<str:code>", views.generateSingleReport),
+    path("GerarRelatorioDia/<str:day>", views.generateDailyReport),
+    path("MonitorarVoo/<str:code>", views.MonitorarVoo, name="manageFlight"),
+    path("", views.Login, name="Login"),
+    path("Login/", views.Login),
+    path("Logout/", views.Logout),
+    path(
+        "MonitorarVoo/<str:code>/UpdateStatus/<str:status>/<str:role>",
+        views.updateStatus,
+    ),
+    path(
+        "MonitorarVoo/<str:code>/cancel/",
+        views.cancelFlight,
+    ),
 ]

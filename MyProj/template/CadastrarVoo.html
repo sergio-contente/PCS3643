@@ -2,91 +2,86 @@
 <html lang="en">
 
 <head>
+    {% load static %}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login</title>
+    <title>Cadastrar Voo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
 </head>
 
 <body>
-
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Voo Registrado com Sucesso</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Voo Registrado com Sucesso
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                 </div>
                 <div class="modal-footer">
-                    <a href="/ListaVoos">
-                        <button type="button" class="btn btn-primary">Ok</button></a>
+                    <a href="/CadastrarVoo">
+                        <button type="button" class="btn btn-primary">
+                                Ok
+                            </button></a>
                 </div>
             </div>
         </div>
     </div>
-    </div>
-    <div style="
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                min-height: 100vh;
-                background-color: blanchedalmond;
-            ">
-        <form>
-            <h1>Registrar Voo</h1>
-            <!-- Email input -->
-            <div class="form-outline mb-4">
-                <input type="email" id="form1Example1" class="form-control" />
-                <label class="form-label" for="form1Example1">Código de Voo</label
-                    >
-                </div>
-                <div class="form-outline mb-4">
-                    <input
-                        type="email"
-                        id="form1Example1"
-                        class="form-control"
-                    />
-                    <label class="form-label" for="form1Example1"
-                        >Horário de Partida</label
-                    >
-                </div>
-                <div class="form-outline mb-4">
-                    <input
-                        type="email"
-                        id="form1Example1"
-                        class="form-control"
-                    />
-                    <label class="form-label" for="form1Example1"
-                        >Horário de Chegada</label
-                    >
-                </div>
-                <div class="form-outline mb-4">
-                    <input
-                        type="email"
-                        id="form1Example1"
-                        class="form-control"
-                    />
-                    <label class="form-label" for="form1Example1">Rota</label>
-            </div>
+    <!-- Modal -->
+    <div class="mainWrapper">
+        <h1>Registrar Voo</h1>
+        <form method="post">
+            {% csrf_token %} 
+                                        
+        <div class="form-outline mb-4">
+        {{form.flightCode}}
+        <label class="form-label" for="form3Example3">Código de Voo</label>
+        </div>
+        <div class="form-outline mb-4">
+        {{form.airline}}
+        <label class="form-label" for="form3Example3">Linha Aérea</label>
+        </div>
+        <div class="form-outline mb-4">
+        {{form.departureAirport}}
+        <label class="form-label" for="form3Example3">Aeroporto de Partida</label>
+        </div>
+        <div class="form-outline mb-4">
+        {{form.destinationAirport}}
+        <label class="form-label" for="form3Example3">Aeroporto de Destino</label>
+        </div>
+        <div class="form-outline mb-4">
+        {{form.departureTime}}
+        <label class="form-label" for="form3Example3">Horário Previsto de Saída</label>
+        </div>
+        <div class="form-outline mb-4">
+        {{form.arrivalTime}}
+        <label class="form-label" for="form3Example3">Horário Previsto de Chegada</label>
+        </div>
 
-            <!-- Submit button -->
-            <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#exampleModal">
-                    Registrar Voo
-                </button>
-            <a href="/ListaVoos">
-                <button type="button" class="btn btn-secondary btn-block">
-                    Cancelar
-                </button>
-            </a>
+        {% include 'messages.html' %}
+<div class="pt-1 mb-4">
+   <div> 
+    <input class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem; background-color: #e46a68;" type="submit" value="Cadastrar" />
+</div>
+<a href="/ListaVoos">
+    <button type="button" class="btn btn-secondary btn-block">
+            Cancelar
+        </button>
+</a>
+</div>
+
+
         </form>
+    </div>
 
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 
 </html>
