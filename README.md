@@ -85,6 +85,18 @@ python manage.py test
 
 Para realizar o login, utilize as seguintes credenciais:
 ```
-Username: admin
-Password: admin
+Username: operator
+Password: operator
+```
+```
+Username: pilot
+Password: pilot
+```
+```
+Username: manager
+Password: manager
+```
+```
+Username: employee
+Password: employee
 ```
