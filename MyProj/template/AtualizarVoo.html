@@ -24,23 +24,41 @@
             <div class="col-md-4"></div>
             <div class="col-md-8">
                 <div class="tab-content profile-tab" id="myTabContent">
-                    <form class="tab-pane fade show active formWrapper" id="home" role="tabpanel" aria-labelledby="home-tab" method="post">
-                        {% csrf_token %} {{ form }}
-                </div>
-                {% include 'messages.html' %}
-                <div class="col-md-2" style="
-                            display: flex;
-                            flex-direction: horizontal;
-                            height: 100%;
-                            width: 100%;
-                        ">
-                    <a><input type="submit" class="btn btn-primary" value="Salvar Voo" />
-                    </a>
+<form method="post">
+{% csrf_token %} 
+
+<div class="form-outline mb-4">
+{{form.airline}}
+<label class="form-label" for="form3Example3">Linha Aérea</label>
+</div>
+<!-- Password input -->
+<div class="form-outline mb-3">
+{{form.departureAirport}}
+<label class="form-label" for="form3Example4">Aerporto de Partida</label>
+</div>
+<div class="form-outline mb-3">
+{{form.destinationAirport}}
+<label class="form-label" for="form3Example4">Aerporto de Destino</label>
+</div>
+<div class="form-outline mb-3">
+{{form.estDepartureTime}}
+<label class="form-label" for="form3Example4">Partida Prevista</label>
+</div>
+<div class="form-outline mb-3">
+{{form.estArrivalTime}}
+<label class="form-label" for="form3Example4">Chegada Prevista</label>
+</div>
+
+{% include 'messages.html' %}
+<div class="pt-1 mb-4">
+<div> 
+<input class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem; background-color: #e46a68;" type="submit" value="Login" />
                     <a href="/MonitorarVoo/{{flight.codigo_voo}}" class="btn btn-secondary">
                                 Cancelar Alterações
                         </a>
-                </div>
-                </form>
+</div>
+</div>
+
             </div>
         </div>
     </div>

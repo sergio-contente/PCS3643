@@ -17,7 +17,15 @@ def ListaVoosChegadas(request):
     if role is None:
         return HttpResponseRedirect("/")
     if request.method == "GET":
-        flights = Voo.objects.all()
+        incoming_routes = Rota.objects.filter(aeroporto_destino="GRU")
+        flight_arrays = []      
+        for route in incoming_routes:
+            try:
+                incoming_flight = Voo.objects.get(rota=route)
+                flight_arrays.append(incoming_flight)
+            except Voo.DoesNotExist:
+                incoming_flight = None
+            
 
         if role == "pilot":
             role = "Piloto"
@@ -28,10 +36,9 @@ def ListaVoosChegadas(request):
         elif role == "operator":
             role = "Operador"
 
-        print(flights)
 
         return render(
-            request, "ListaVoos-Chegadas.html", {"flights": flights, "role": role}
+            request, "ListaVoos-Chegadas.html", {"flights": flight_arrays, "role": role}
         )
 
 
@@ -40,7 +47,15 @@ def ListaVoos(request):
     if role is None:
         return HttpResponseRedirect("/")
     if request.method == "GET":
-        flights = Voo.objects.all()
+        outgoing_routes = Rota.objects.filter(aeroporto_saida="GRU")
+        flight_arrays = []      
+        for route in outgoing_routes:
+            try:
+                outgoing_flight = Voo.objects.get(rota=route)
+                flight_arrays.append(outgoing_flight)
+            except Voo.DoesNotExist:
+                outgoing_flight = None
+
 
         if role == "pilot":
             role = "Piloto"
@@ -51,9 +66,9 @@ def ListaVoos(request):
         elif role == "operator":
             role = "Operador"
 
-        print(flights)
+        #print(flights)
 
-        return render(request, "ListaVoos.html", {"flights": flights, "role": role})
+        return render(request, "ListaVoos.html", {"flights":  flight_arrays, "role": role})
 
 
 def deleteFlight(request, codigo):
@@ -63,14 +78,14 @@ def deleteFlight(request, codigo):
 
 
 def generateDailyReport(request, day: str):
-    print("><><>", day)
     allFlights = Voo.objects.all()
     flights = []
     for flight in allFlights:
         if flight.previsao.partida_prevista.strftime("%Y-%m-%d") == day:
             flights.append(flight)
+    totalFlights = len(flights)
 
-    return render(request, "GerarRelatorios.html", {"flights": flights})
+    return render(request, "GerarRelatorios.html", {"flights": flights, "totalFlights":totalFlights})
 
 
 def generateSingleReport(request, code: str):
@@ -138,26 +153,40 @@ def CadastrarVoo(request):
                             )
                             return HttpResponseRedirect("/CadastrarVoo/")
                         else:
-                            Voo.objects.create(
-                                codigo_voo=newFlightInfo["flightCode"],
-                                companhia_aerea=newFlightInfo["airline"],
-                                estado=Status.objects.create(),
-                                rota=Rota.objects.create(
-                                    aeroporto_destino=airports[
-                                        int(newFlightInfo["destinationAirport"]) - 1
-                                    ][1],
-                                    aeroporto_saida=airports[
-                                        int(newFlightInfo["departureAirport"]) - 1
-                                    ][1],
-                                ),
-                                previsao=HorarioPrevisto.objects.create(
-                                    partida_prevista=newFlightInfo["departureTime"],
-                                    chegada_prevista=newFlightInfo["arrivalTime"],
-                                ),
-                                real=HorarioReal.objects.create(),
-                            )
-                            messages.success(request, "Voo cadastrado com sucesso!")
-                            return HttpResponseRedirect("/CadastrarVoo/")
+                            try:
+                                flight_code = newFlightInfo["codigo_voo"]
+                                tem_voo = Voo.objects.get(codigo_voo=flight_code)
+                                if tem_voo == None:
+                                    raise TypeError(
+                                        "Voo já cadastrado."
+                                    )
+                            except:
+                                messages.error(
+                                    request,
+                                    "Voo já cadastrado.",
+                                 )
+                                return HttpResponseRedirect("/CadastrarVoo/")
+                            else:
+                                Voo.objects.create(
+                                    codigo_voo=newFlightInfo["flightCode"],
+                                    companhia_aerea=newFlightInfo["airline"],
+                                    estado=Status.objects.create(),
+                                    rota=Rota.objects.create(
+                                        aeroporto_destino=airports[
+                                            int(newFlightInfo["destinationAirport"]) - 1
+                                        ][1],
+                                        aeroporto_saida=airports[
+                                            int(newFlightInfo["departureAirport"]) - 1
+                                        ][1],
+                                    ),
+                                    previsao=HorarioPrevisto.objects.create(
+                                        partida_prevista=newFlightInfo["departureTime"],
+                                        chegada_prevista=newFlightInfo["arrivalTime"],
+                                    ),
+                                    real=HorarioReal.objects.create(),
+                                )
+                                messages.success(request, "Voo cadastrado com sucesso!")
+                                return HttpResponseRedirect("/CadastrarVoo/")
         else:
             newFlightInfo = form.cleaned_data
             print(str(newFlightInfo["departureTime"]))
@@ -175,7 +204,7 @@ def CadastrarVoo(request):
                 print(form.errors.as_data())
                 messages.error(
                     request,
-                    "Formato de data(s) incorreto)(s)",
+                    "Formato de codigo de voo incorreto",
                 )
             return HttpResponseRedirect("/CadastrarVoo/")
     else:
@@ -350,7 +379,7 @@ def MonitorarVoo(request, code):
                         flight.real.save()
                         print(flight.real.chegada_real - flight.real.chegada_real)
                         flight.erro = (
-                            flight.real.chegada_real - flight.real.partida_real
+                            flight.real.chegada_real - flight.previsao.chegada_prevista
                         ).seconds
                         flight.save()
                         return HttpResponseRedirect(

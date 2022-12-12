@@ -25,7 +25,7 @@ class Rota(models.Model):
 
 class Status(models.Model):
     id_status = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    status_voo = models.CharField(max_length=20, null=False, default=flightStatus[0][1])
+    status_voo = models.CharField(max_length=20, null=False, default=flightStatus[1][1])
 
     class Meta:
         db_table = "status"

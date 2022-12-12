@@ -29,7 +29,7 @@ class RegisterFlightForm(forms.Form):
     airline = forms.ChoiceField(
         label="Linha Aérea",
         choices=airlines,
-        widget=forms.TextInput(
+        widget=forms.Select(
             attrs={
                 "class": "form-control form-control-lg",
                 "id": "form3example3",
@@ -40,7 +40,7 @@ class RegisterFlightForm(forms.Form):
     departureAirport = forms.ChoiceField(
         choices=airports,
         label="Aeroporto de Saída",
-        widget=forms.TextInput(
+        widget=forms.Select(
             attrs={
                 "class": "form-control form-control-lg",
                 "id": "form3example3",
@@ -51,7 +51,7 @@ class RegisterFlightForm(forms.Form):
     destinationAirport = forms.ChoiceField(
         choices=airports,
         label="Aeroporto de Partida",
-        widget=forms.TextInput(
+        widget=forms.Select(
             attrs={
                 "class": "form-control form-control-lg",
                 "id": "form3example3",
@@ -95,13 +95,60 @@ class generalForm(forms.Form):
 
 
 class operatorForm(forms.Form):
-    airline = forms.CharField(label="Linha Aérea")
-    departureAirport = forms.ChoiceField(choices=airports, label="Aeroporto de Saída")
-    destinationAirport = forms.ChoiceField(
-        choices=airports, label="Aeroporto de Partida"
+    airline = forms.CharField(
+        label="Linha Aérea",
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "id": "form3example3",
+                "placeholder": "Linha Aérea",
+            }
+        ),
     )
-    estDepartureTime = forms.DateTimeField(label="Partida Prevista")
-    estArrivalTime = forms.DateTimeField(label="Chegada Prevista")
+    departureAirport = forms.ChoiceField(
+        choices=airports,
+        label="Aeroporto de Saída",
+        widget=forms.Select(
+            attrs={
+                "class": "form-control form-control-lg",
+                "id": "form3example3",
+                "placeholder": "Aerorporto de Partida",
+            }
+        ),
+    )
+    
+    destinationAirport = forms.ChoiceField(
+        choices=airports,
+        label="Aeroporto de Partida",
+         widget=forms.Select(
+            attrs={
+                "class": "form-control form-control-lg",
+                "id": "form3example3",
+                "placeholder": "Aeroporto de Destino",
+            }
+        ),
+    )
+
+    estDepartureTime = forms.DateTimeField(
+        label="Partida Prevista",
+        widget=forms.DateTimeInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "id": "form3example4",
+                "placeholder": "Chegada Real",
+            }
+        ),
+    )
+    estArrivalTime = forms.DateTimeField(
+        label="Chegada Prevista",
+        widget=forms.DateTimeInput(attrs={
+            "class": "form-control form-control-lg",
+            "id": "form3example4",
+            "placeholder": "Chegada Real",
+        }
+        ),
+    )
 
 
 class pilotForm(forms.Form):
@@ -123,7 +170,7 @@ class pilotForm(forms.Form):
             attrs={
                 "class": "form-control form-control-lg",
                 "id": "form3example4",
-                "placeholder": "Senha",
+                "placeholder": "Chegada Real",
             }
         ),
     )

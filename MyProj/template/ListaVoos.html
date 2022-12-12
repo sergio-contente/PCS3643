@@ -113,7 +113,7 @@
 
         <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="ListaVoos">Partidas</a>
+            <a class="nav-link active" aria-current="page" href="/ListaVoos/">Partidas</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/ListaVoos/Chegadas">Chegadas</a>
@@ -126,9 +126,9 @@
             <thead class="bg-light">
                 <tr>
                     <th>Código de Voo</th>
-                    <th>Aeroporto de Saída</th>
                     <th>Aeroporto de Chegada</th>
                     <th>Horário Previsto de Saída</th>
+                    <th>Horário Previsto de Chegada</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -146,17 +146,14 @@
                             </div>
                         </div>
                     </td>
-                    <td>
-                        <p class="fw-normal mb-1">
-                            {{flight.rota.aeroporto_saida}}
-                        </p>
-                    </td>
+                    
                     <td>
                         <p class="fw-normal mb-1">
                             {{flight.rota.aeroporto_destino}}
                         </p>
                     </td>
                     <td>{{flight.previsao.partida_prevista|date:"d/m/Y - H:i"}}</td>
+                    <td>{{flight.previsao.chegada_prevista|date:"d/m/Y - H:i"}}</td>
                     <td>
                         <a href="/MonitorarVoo/{{flight.codigo_voo}}">
                             <button

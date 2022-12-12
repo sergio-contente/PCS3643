@@ -127,8 +127,8 @@
                 <tr>
                     <th>Código de Voo</th>
                     <th>Aeroporto de Origem</th>
-                    <th>Aeroporto de Chegada</th>
                     <th>Horário Previsto de Saída</th>
+                    <th>Horário Previsto de Chegada</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -151,12 +151,9 @@
                             {{flight.rota.aeroporto_saida}}
                         </p>
                     </td>
-                    <td>
-                        <p class="fw-normal mb-1">
-                            {{flight.rota.aeroporto_destino}}
-                        </p>
-                    </td>
+                   
                     <td>{{flight.previsao.partida_prevista|date:"d/m/Y - H:i"}}</td>
+                    <td>{{flight.previsao.partida_chegada|date:"d/m/Y - H:i"}}</td>
                     <td>
                         <a href="/MonitorarVoo/{{flight.codigo_voo}}">
                             <button
